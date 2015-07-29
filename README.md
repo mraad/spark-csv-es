@@ -121,6 +121,7 @@ The file is henceforth named `DC_311_2010.csv`.
 Download and install [Elasticseach](https://www.elastic.co/downloads/elasticsearch)
 
 **Note:** Before starting the server, make sure to:
+
 1. Define the env variable `ES_HEAP_SIZE` to set both the minimum and maximum memory to allocate.
 2. Adjust the property `network.host` in the `config/elasticsearch.yml`. This will be henceforth known as `${ES_HOST}`.
 
@@ -246,13 +247,21 @@ There are 2 tools in the `ESToolbox.pyt` tool box:
 This tool enables the user to define a `where` clause to filter the service requests on the server side and
 converts the resulting hits into point features.
 
+![](media/querytool.png)
+
 **Note:** there is a hard limit of 100,000 resulting documents in the default implementation.
+
+![](media/querytool-map.png)
 
 ### Hex Density
 
 This tool enables the user to define a `where` clause to filter the service requests on the server side and a hexagonal clustering size.
 The resulting hits are converted to features with hexagon shaped polygons for geometry and the number of service requests that fall into its area
 as attribute.
+
+![](media/hextool.png)
+
+![](media/hextool-map.png)
 
 There is **no** spatial point in polygon operation in the above query. This is a pure `group by` SQL operation,
 because all the services requests have be preprocessed at load time with the hexagonal indexes that they will fall into.
@@ -261,7 +270,7 @@ And these indexes have been added as searchable properties into the document ena
 What is actually returned by Elasticsearch is the hexagon _index_ in the form of a row and column.
 The conversion from row/column to an array of coordinates that make up the polygon shape is done on the client side at runtime.
 Retuning indexes massively reduces the network payload and makes the server do less work because the polygon coordinates generation is offloaded to the client. 
-This is _cooperative processing_ between the client and the server, a term I used to use 18 years ago on SDE when I was a specialist on it !
+This is _cooperative processing_ between the client and the server, a term I used to use 20 years ago on [SDE](http://www.esri.com/software/arcgis/arcsde) when I was a specialist on it !
 
 #### TODO
 
