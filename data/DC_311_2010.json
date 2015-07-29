@@ -1,0 +1,249 @@
+{
+  "mappings": {
+    "sr311": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "serviceorderdate": {
+          "type": "date",
+          "format": "YYYY-MM-dd HH:mm:ss"
+        },
+        "lastmodifieddate_dow": {
+          "type": "integer"
+        },
+        "loc_200": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "anc": {
+          "type": "string"
+        },
+        "resolutiondate": {
+          "type": "date",
+          "format": "YYYY-MM-dd HH:mm:ss"
+        },
+        "adddate": {
+          "type": "date",
+          "format": "YYYY-MM-dd HH:mm:ss"
+        },
+        "serviceorderdate_yy": {
+          "type": "integer"
+        },
+        "loc_100": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "serviceduedate_mm": {
+          "type": "integer"
+        },
+        "resolutiondate_dd": {
+          "type": "integer"
+        },
+        "resolutiondate_mm": {
+          "type": "integer"
+        },
+        "loc_x": {
+          "index": "no",
+          "type": "float"
+        },
+        "loc_y": {
+          "index": "no",
+          "type": "float"
+        },
+        "servicetypecode": {
+          "type": "string"
+        },
+        "servicerequestid": {
+          "type": "string"
+        },
+        "servicenotes": {
+          "type": "string"
+        },
+        "adddate_dow": {
+          "type": "integer"
+        },
+        "inspectiondate_yy": {
+          "type": "integer"
+        },
+        "maraddressrepositoryid": {
+          "type": "string"
+        },
+        "loc": {
+          "type": "geo_point"
+        },
+        "adddate_hh": {
+          "type": "integer"
+        },
+        "inspectiondate_dow": {
+          "type": "integer"
+        },
+        "serviceorderdate_dow": {
+          "type": "integer"
+        },
+        "lastmodifieddate_yy": {
+          "type": "integer"
+        },
+        "servicetypecodedescription": {
+          "type": "string"
+        },
+        "serviceduedate_yy": {
+          "type": "integer"
+        },
+        "lastmodifieddate_hh": {
+          "type": "integer"
+        },
+        "dcstatlocationkey": {
+          "type": "string"
+        },
+        "zipcode": {
+          "type": "string"
+        },
+        "inspectiondate_mm": {
+          "type": "integer"
+        },
+        "hotspot2004name": {
+          "type": "string"
+        },
+        "serviceorderdate_hh": {
+          "type": "integer"
+        },
+        "lastmodifieddate": {
+          "type": "date",
+          "format": "YYYY-MM-dd HH:mm:ss"
+        },
+        "loc_10": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "hotspot2006name": {
+          "type": "string"
+        },
+        "smd": {
+          "type": "string"
+        },
+        "hotspot2005name": {
+          "type": "string"
+        },
+        "serviceduedate_dd": {
+          "type": "integer"
+        },
+        "serviceorderdate_dd": {
+          "type": "integer"
+        },
+        "adddate_yy": {
+          "type": "integer"
+        },
+        "loc_1K": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "serviceduedate_hh": {
+          "type": "integer"
+        },
+        "adddate_dd": {
+          "type": "integer"
+        },
+        "serviceduedate": {
+          "type": "date",
+          "format": "YYYY-MM-dd HH:mm:ss"
+        },
+        "servicesourcecode": {
+          "type": "string"
+        },
+        "loc_500": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "psa": {
+          "type": "string"
+        },
+        "lastmodifieddate_mm": {
+          "type": "integer"
+        },
+        "serviceduedate_dow": {
+          "type": "integer"
+        },
+        "lastmodifieddate_dd": {
+          "type": "integer"
+        },
+        "resolutiondate_dow": {
+          "type": "integer"
+        },
+        "servicecode": {
+          "type": "string"
+        },
+        "servicecallcount": {
+          "type": "integer"
+        },
+        "inspectiondate_dd": {
+          "type": "integer"
+        },
+        "ward": {
+          "type": "string"
+        },
+        "dcstataddresskey": {
+          "type": "string"
+        },
+        "parentservicerequestid": {
+          "type": "string"
+        },
+        "siteaddress": {
+          "type": "string"
+        },
+        "servicecodedescription": {
+          "type": "string"
+        },
+        "serviceorderdate_mm": {
+          "type": "integer"
+        },
+        "district": {
+          "type": "string"
+        },
+        "servicepriority": {
+          "type": "string"
+        },
+        "serviceorderstatus": {
+          "type": "string"
+        },
+        "adddate_mm": {
+          "type": "integer"
+        },
+        "resolutiondate_yy": {
+          "type": "integer"
+        },
+        "inspectionflag": {
+          "type": "string"
+        },
+        "inspectiondate": {
+          "type": "date",
+          "format": "YYYY-MM-dd HH:mm:ss"
+        },
+        "neighborhoodcluster": {
+          "type": "string"
+        },
+        "inspectiondate_hh": {
+          "type": "integer"
+        },
+        "agencyabbreviation": {
+          "type": "string"
+        },
+        "resolution": {
+          "type": "string"
+        },
+        "resolutiondate_hh": {
+          "type": "integer"
+        }
+      },
+      "_source": {
+        "enabled": true
+      }
+    }
+  },
+  "settings": {
+    "auto_expand_replicas": "false",
+    "number_of_replicas": 0,
+    "refresh_interval": "-1",
+    "number_of_shards": 1
+  }
+}
