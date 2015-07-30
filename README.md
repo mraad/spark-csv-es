@@ -26,6 +26,10 @@ The following is a sample with the necessary keys:
 
 ```ini
 #
+# Spark master - http://spark.apache.org/docs/latest/submitting-applications.html#master-urls
+#
+spark.master=local[*]
+#
 # Elasticsearch hosts
 #
 es.nodes=localhost
