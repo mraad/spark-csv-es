@@ -194,6 +194,16 @@ environment with values of `1` and `0`.
 $ curl -XDELETE "${ES_HOST}:9200/dc";curl -XPOST "${ES_HOST}:9200/dc" -d @DC_311_2010.json
 ```
 
+In the `ESToolbox.pyt` toolbox exists the `CreateIndexTool` tool to create an ES index.
+   
+Make sure to first install the [elasticsearch-py](https://www.elastic.co/guide/en/elasticsearch/client/python-api/current/index.html) python module.
+   
+```shell
+$ pip install elasticsearch
+```
+   
+![](media/createindex.png)
+
 ## Bulk Load CSV using Spark
 
 Download and install [Apache Spark](http://spark.apache.org/downloads.html) and make sure the Spark `bin` path

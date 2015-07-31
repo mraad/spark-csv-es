@@ -8,13 +8,19 @@ from hexcell import HexCell
 from hexgrid import HexGrid
 import math
 import arcpy
+#
+# https://www.elastic.co/guide/en/elasticsearch/client/python-api/current/index.html
+#
+# pip install elasticsearch
+#
+from elasticsearch import Elasticsearch
 
 
 class Toolbox(object):
     def __init__(self):
         self.label = "ESToolbox"
         self.alias = "ES Toolbox"
-        self.tools = [HexTool, QueryTool]
+        self.tools = [HexTool, QueryTool, CreateIndexTool]
 
 
 class BaseTool(object):
@@ -212,3 +218,56 @@ class QueryTool(BaseTool):
             parameters[2].value = fc
         except:
             arcpy.AddMessage(traceback.format_exc())
+
+class CreateIndexTool(object):
+    def __init__(self):
+        self.label = "Create Index"
+        self.description = "Create Elasticsearch index from JSON file"
+        self.canRunInBackground = False
+
+    def getParameterInfo(self):
+        paramName = arcpy.Parameter(
+            name="in_host",
+            displayName="ES Host",
+            direction="Input",
+            datatype="GPString",
+            parameterType="Required")
+        paramName.value = "mansour-mac"
+
+        paramIndex = arcpy.Parameter(
+            name="in_index",
+            displayName="Index Name",
+            direction="Input",
+            datatype="GPString",
+            parameterType="Required")
+        paramIndex.value = "crime"
+
+        paramFile = arcpy.Parameter(
+            name="in_file",
+            displayName="JSON file",
+            direction="Input",
+            datatype="DEFile",
+            parameterType="Required")
+        paramFile.value = r"Z:/Share/DCOCTO/crime.json"
+        paramFile.filter.list = ['json']
+        return [paramName, paramIndex, paramFile]
+
+    def isLicensed(self):
+        return True
+
+    def updateParameters(self, parameters):
+        return
+
+    def updateMessages(self, parameters):
+        return
+
+    def execute(self, parameters, messages):
+        with open(parameters[2].valueAsText, 'rb') as f:
+            body = json.load(f)
+            es = Elasticsearch(hosts=parameters[0].valueAsText)
+            index = parameters[1].valueAsText
+            if not es.indices.exists(index=index):
+                es.indices.create(index=index, body=body)
+            else:
+                arcpy.AddWarning("{0} already exists !".format(index))
+        return
