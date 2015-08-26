@@ -74,7 +74,7 @@ hex.sizes=\
 fields=\
   oid,object_id,0;\
   geo,loc,1,2;\
-  date,a_date,3,YYYY-DD-dd;\
+  date,a_date,3,YYYY-MM-dd;\
   string,a_string,4;\
   int,a_int,4;\
   float,a_float,5
@@ -201,7 +201,7 @@ Make sure to first install the [elasticsearch-py](https://www.elastic.co/guide/e
 ```shell
 $ pip install elasticsearch
 ```
-   
+,   
 ![](media/createindex.png)
 
 ## Bulk Load CSV using Spark

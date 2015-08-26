@@ -69,7 +69,7 @@ class BaseTool(object):
             name="outputFC",
             displayName="outputFC",
             direction="Output",
-            datatype="DEFeatureClass",
+            datatype="Feature Layer",
             parameterType="Derived")
         # paramFC.symbology = "Z:/Share/population.lyr"
         return paramFC

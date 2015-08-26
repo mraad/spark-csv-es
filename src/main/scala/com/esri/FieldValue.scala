@@ -47,6 +47,41 @@ case class FieldFloat(splits: Array[String]) extends FieldValue {
   }
 }
 
+/**
+ * date-time,[property_name],[date_index],[time_index],YYYY-MM-dd,HH:mm:ss
+ *
+ * @param splits
+ */
+case class FieldDateTime(splits: Array[String]) extends FieldValue {
+
+  val fieldName = splits(1)
+  val indexDate = splits(2).toInt
+  val indexTime = splits(3).toInt
+  @transient
+  lazy val parser = DateTimeFactory.forPattern(splits(4) + " " + splits(5))
+
+  @transient
+  lazy val formatter = DateTimeFactory.forPattern("YYYY-MM-dd HH:mm:ss")
+
+  override def parse(splits: Array[String]): Seq[(String, Any)] = {
+    val aDate = splits(indexDate)
+    val aTime = splits(indexTime)
+    if (aDate.length == 0 || aTime.length == 0)
+      Seq.empty
+    else {
+      val datetime = parser.parseDateTime(aDate + " " + aTime)
+      Seq(
+        (fieldName, formatter.print(datetime.getMillis)),
+        (fieldName + "_yy", datetime.getYear),
+        (fieldName + "_mm", datetime.getMonthOfYear),
+        (fieldName + "_dd", datetime.getDayOfMonth),
+        (fieldName + "_hh", datetime.getHourOfDay),
+        (fieldName + "_dow", datetime.getDayOfWeek)
+      )
+    }
+  }
+}
+
 case class FieldDate(splits: Array[String]) extends FieldValue {
 
   val fieldName = splits(1)

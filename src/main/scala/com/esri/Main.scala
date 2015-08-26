@@ -69,6 +69,7 @@ object Main extends App with Logging {
           case "int" => FieldInt(splits)
           case "float" => FieldFloat(splits)
           case "date" => FieldDate(splits)
+          case "date-time" => FieldDateTime(splits)
           case "date-only" => FieldDateOnly(splits)
           case _ => FieldString(splits)
         }
