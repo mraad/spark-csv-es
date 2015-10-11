@@ -5,7 +5,6 @@ import java.util.Properties
 
 import com.esri.hex.{Hex00, HexGrid, HexRowCol, HexXY}
 import org.apache.spark.{Logging, SparkConf, SparkContext}
-import org.elasticsearch.hadoop.cfg.ConfigurationOptions
 import org.elasticsearch.spark._
 
 import scala.collection.JavaConverters._
@@ -19,10 +18,13 @@ object Main extends App with Logging {
     .setMaster("local[*]")
     .set("spark.driver.memory", "16g")
     .set("spark.executor.memory", "16g")
-    .set(ConfigurationOptions.ES_NODES, "mansour-mac")
+    // .set(ConfigurationOptions.ES_NODES, "local192")
     // .set(ConfigurationOptions.ES_MAPPING_ID, "object_id")
     // .set(ConfigurationOptions.ES_WRITE_OPERATION, ConfigurationOptions.ES_OPERATION_UPSERT)
     .registerKryoClasses(Array(
+      classOf[FieldDate],
+      classOf[FieldDateTime],
+      classOf[FieldDateOnly],
       classOf[FieldValue],
       classOf[FieldFloat],
       classOf[FieldInt],
@@ -60,10 +62,11 @@ object Main extends App with Logging {
     val conf = sc.getConf
     val confMap = conf.getAll.toMap
 
-    val fields = conf.get("fields", "oid,object_id,0")
+    val fields = conf.get("fields", "oid,object_id,-1")
       .split(';')
-      .map(text => {
-        val splits = text.split(',')
+      .map(_.split(','))
+      .filterNot(splits => splits(2) == "-1")
+      .map(splits => {
         splits(0) match {
           case "geo" => FieldGeo(confMap, splits)
           case "int" => FieldInt(splits)
@@ -85,7 +88,7 @@ object Main extends App with Logging {
         }
         catch {
           case t: Throwable => {
-            log.error(t.getMessage)
+            // log.warn(t.getMessage)
             acc += 1
             None
           }

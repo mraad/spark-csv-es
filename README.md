@@ -182,7 +182,7 @@ $ pip install pyjavaproperties
 ```
 
 ```shell
-$ gen-mapping.py DC_311_2010.properties > DC_311_2010.json 
+$ gen-mapping.py DC_311_2010.properties 
 ```
 
 **Note** You might want to modify the `number_of_shards` and `number_of_replicas` as they are set for a development

@@ -20,7 +20,7 @@ def main():
     p.load(open(sys.argv[1]))
 
     hex_sizes = p['hex.sizes'].split(';')
-    hex_sizes = [hs.split(',')[0] for hs in hex_sizes]
+    hex_sizes = [hs.split(',')[1] for hs in hex_sizes]
     mappings = p['index.mapping'].split('/')[1]
 
     properties = {}
@@ -37,6 +37,8 @@ def main():
                 properties[name + "_" + hs] = {"type": "string", "index": "not_analyzed"}
         elif tokens[0] == 'int':
             properties[tokens[1]] = {"type": "integer"}
+        elif tokens[0] == 'long':
+            properties[tokens[1]] = {"type": "long"}
         elif tokens[0] == 'float':
             properties[tokens[1]] = {"type": "float"}
         elif tokens[0] == 'date' or tokens[0] == 'date-time':
@@ -52,7 +54,7 @@ def main():
             properties[name] = {"type": "date", "format": "YYYY-MM-dd HH:mm:ss"}
         else:
             name = tokens[1]
-            properties[name] = {"type": "string"}
+            properties[name] = {"type": "string", "index": "not_analyzed"}
 
     doc = {
         "settings": {
@@ -72,7 +74,9 @@ def main():
         }}
     }
 
-    print json.dumps(doc, ensure_ascii=False)
+    basename, extension = os.path.splitext(sys.argv[1])
+    with open(basename + ".json", "wb") as fw:
+        fw.write(json.dumps(doc, ensure_ascii=False, indent=2))
 
 
 if __name__ == '__main__':
