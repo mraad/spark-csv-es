@@ -40,7 +40,7 @@ def main():
             fw.write("spark.executor.memory=12g\n")
             fw.write("es.nodes=local192\n")
             fw.write("index.mapping={}/data\n".format(name))
-            fw.write("hex.sizes=50,50;100,100;200,200;500,500;1000,1km;5000,5km\n")
+            fw.write("hex.sizes=50,50;100,100;200,200;500,500\n")
             fw.write("input.path={}\n".format(sys.argv[1]))
             fw.write("field.sep={}\n".format(field_sep))
             fw.write("fields={}\n".format(join))

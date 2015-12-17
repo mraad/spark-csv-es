@@ -20,7 +20,7 @@ def main():
     p.load(open(sys.argv[1]))
 
     hex_sizes = p['hex.sizes'].split(';')
-    hex_sizes = [hs.split(',')[1] for hs in hex_sizes]
+    hex_sizes = [hs.split(',')[0] for hs in hex_sizes]
     mappings = p['index.mapping'].split('/')[1]
 
     properties = {}

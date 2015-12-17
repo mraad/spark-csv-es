@@ -22,20 +22,20 @@ object Main extends App with Logging {
     // .set(ConfigurationOptions.ES_MAPPING_ID, "object_id")
     // .set(ConfigurationOptions.ES_WRITE_OPERATION, ConfigurationOptions.ES_OPERATION_UPSERT)
     .registerKryoClasses(Array(
-      classOf[FieldDate],
-      classOf[FieldDateTime],
-      classOf[FieldDateOnly],
-      classOf[FieldValue],
-      classOf[FieldFloat],
-      classOf[FieldInt],
-      classOf[FieldGeo],
-      classOf[FieldString],
-      classOf[CSVReader],
-      classOf[HexGrid],
-      classOf[HexRowCol],
-      classOf[HexXY],
-      classOf[Hex00])
-    )
+    classOf[FieldDate],
+    classOf[FieldDateTime],
+    classOf[FieldDateOnly],
+    classOf[FieldValue],
+    classOf[FieldFloat],
+    classOf[FieldInt],
+    classOf[FieldGeo],
+    classOf[FieldString],
+    classOf[CSVReader],
+    classOf[HexGrid],
+    classOf[HexRowCol],
+    classOf[HexXY],
+    classOf[Hex00])
+  )
 
   val filename = args.length match {
     case 0 => "application.properties"
@@ -88,7 +88,6 @@ object Main extends App with Logging {
         }
         catch {
           case t: Throwable => {
-            // log.warn(t.getMessage)
             acc += 1
             None
           }
