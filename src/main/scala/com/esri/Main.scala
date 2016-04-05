@@ -79,9 +79,11 @@ object Main extends App with Logging {
       })
     val acc = sc.accumulator[Int](0)
     val fieldSep = conf.get("field.sep", "\t")(0)
+    val headerCount = conf.getInt("header.count", 0) - 1
     val csvReader = new CSVReader(fieldSep)
     sc.textFile(conf.get("input.path"))
       .zipWithIndex()
+      .filter(_._2 > headerCount)
       .flatMap { case (line, lineno) => {
         try {
           val splits = csvReader.parseCSV(line)
