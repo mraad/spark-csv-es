@@ -81,18 +81,22 @@ object Main extends App with Logging {
     val fieldSep = conf.get("field.sep", "\t")(0)
     val csvReader = new CSVReader(fieldSep)
     sc.textFile(conf.get("input.path"))
-      .flatMap(line => {
+      .zipWithIndex()
+      .flatMap { case (line, lineno) => {
         try {
           val splits = csvReader.parseCSV(line)
-          Some(fields.flatMap(_.parse(splits)).toMap)
+          Some(fields.flatMap(_.parse(splits, lineno)).toMap)
         }
         catch {
           case t: Throwable => {
+            log.error(s"Cannot parse line $lineno ($line)")
             acc += 1
             None
           }
         }
-      })
+      }
+      }
+      .filter(_.nonEmpty)
       .saveToEs(conf.get("index.mapping"))
     log.info("Throwable count = %d".format(acc.value))
   } finally {

@@ -1,54 +1,61 @@
 package com.esri
 
 import com.esri.hex.HexGrid
+import org.apache.spark.Logging
 
 import scala.collection.mutable.ArrayBuffer
 
 /**
   */
 trait FieldValue extends Serializable {
-  def parse(splits: Array[String]): Seq[(String, Any)]
+  def parse(splits: Array[String], lineno: Long): Seq[(String, Any)]
 }
 
 case class FieldString(splits: Array[String]) extends FieldValue {
   val fieldName = splits(1)
   val index = splits(2).toInt
 
-  override def parse(splits: Array[String]): Seq[Pair[String, Any]] = {
+  override def parse(splits: Array[String], lineno: Long): Seq[Pair[String, Any]] = {
     Seq((fieldName, splits(index)))
   }
 }
 
-case class FieldInt(splits: Array[String]) extends FieldValue {
+case class FieldInt(splits: Array[String]) extends FieldValue with Logging {
   val fieldName = splits(1)
   val index = splits(2).toInt
 
-  override def parse(splits: Array[String]): Seq[Pair[String, Any]] = {
+  override def parse(splits: Array[String], lineno: Long): Seq[Pair[String, Any]] = {
     val aInt = splits(index)
-    if (aInt.length == 0)
+    if (aInt.isEmpty)
       Seq.empty
     else
       try {
         Seq((fieldName, aInt.toInt))
       } catch {
-        case _: Throwable => Seq.empty
+        case _: Throwable => {
+          log.warn(s"Cannot parse $aInt for field $fieldName at line $lineno")
+          Seq.empty
+        }
       }
   }
 }
 
-case class FieldFloat(splits: Array[String]) extends FieldValue {
+case class FieldFloat(splits: Array[String]) extends FieldValue with Logging {
   val fieldName = splits(1)
   val index = splits(2).toInt
 
-  override def parse(splits: Array[String]): Seq[Pair[String, Any]] = {
+  override def parse(splits: Array[String], lineno: Long): Seq[Pair[String, Any]] = {
     val aDouble = splits(index)
-    if (aDouble.length == 0)
+    if (aDouble.isEmpty)
       Seq.empty
     else
       try {
         Seq((fieldName, aDouble.toDouble))
       } catch {
-        case _: Throwable => Seq.empty
+        case _: Throwable => {
+          log.warn(s"Cannot parse $aDouble for field $fieldName at line $lineno")
+          Seq.empty
+        }
       }
   }
 }
@@ -58,7 +65,7 @@ case class FieldFloat(splits: Array[String]) extends FieldValue {
   *
   * @param splits
   */
-case class FieldDateTime(splits: Array[String]) extends FieldValue {
+case class FieldDateTime(splits: Array[String]) extends FieldValue with Logging {
 
   val fieldName = splits(1)
   val indexDate = splits(2).toInt
@@ -69,10 +76,10 @@ case class FieldDateTime(splits: Array[String]) extends FieldValue {
   @transient
   lazy val formatter = DateTimeFactory.forPattern("YYYY-MM-dd HH:mm:ss")
 
-  override def parse(splits: Array[String]): Seq[(String, Any)] = {
+  override def parse(splits: Array[String], lineno: Long): Seq[(String, Any)] = {
     val aDate = splits(indexDate)
     val aTime = splits(indexTime)
-    if (aDate.length == 0 || aTime.length == 0)
+    if (aDate.isEmpty || aTime.isEmpty)
       Seq.empty
     else {
       try {
@@ -86,13 +93,16 @@ case class FieldDateTime(splits: Array[String]) extends FieldValue {
           (fieldName + "_dow", datetime.getDayOfWeek)
         )
       } catch {
-        case _: Throwable => Seq.empty
+        case _: Throwable => {
+          log.warn(s"Cannot parse $aDate for field $fieldName at line $lineno")
+          Seq.empty
+        }
       }
     }
   }
 }
 
-case class FieldDate(splits: Array[String]) extends FieldValue {
+case class FieldDate(splits: Array[String]) extends FieldValue with Logging {
 
   val fieldName = splits(1)
   val index = splits(2).toInt
@@ -101,9 +111,9 @@ case class FieldDate(splits: Array[String]) extends FieldValue {
   @transient
   lazy val formatter = DateTimeFactory.forPattern("YYYY-MM-dd HH:mm:ss")
 
-  override def parse(splits: Array[String]): Seq[(String, Any)] = {
+  override def parse(splits: Array[String], lineno: Long): Seq[(String, Any)] = {
     val aDate = splits(index)
-    if (aDate.length == 0)
+    if (aDate.isEmpty)
       Seq.empty
     else {
       try {
@@ -117,13 +127,16 @@ case class FieldDate(splits: Array[String]) extends FieldValue {
           (fieldName + "_dow", datetime.getDayOfWeek)
         )
       } catch {
-        case _: Throwable => Seq.empty
+        case _: Throwable => {
+          log.warn(s"Cannot parse $aDate for field $fieldName at line $lineno")
+          Seq.empty
+        }
       }
     }
   }
 }
 
-case class FieldDateOnly(splits: Array[String]) extends FieldValue {
+case class FieldDateOnly(splits: Array[String]) extends FieldValue with Logging {
 
   val fieldName = splits(1)
   val index = splits(2).toInt
@@ -132,19 +145,26 @@ case class FieldDateOnly(splits: Array[String]) extends FieldValue {
   @transient
   lazy val formatter = DateTimeFactory.forPattern("YYYY-MM-dd HH:mm:ss")
 
-  override def parse(splits: Array[String]): Seq[(String, Any)] = {
-    try {
-      val datetime = parser.parseDateTime(splits(index))
-      Seq(
-        (fieldName, formatter.print(datetime.getMillis))
-      )
-    } catch {
-      case _: Throwable => Seq.empty
-    }
+  override def parse(splits: Array[String], lineno: Long): Seq[(String, Any)] = {
+    val aDate = splits(index)
+    if (aDate.isEmpty)
+      Seq.empty
+    else
+      try {
+        val datetime = parser.parseDateTime(aDate)
+        Seq(
+          (fieldName, formatter.print(datetime.getMillis))
+        )
+      } catch {
+        case _: Throwable => {
+          log.warn(s"Cannot parse $aDate for field $fieldName at line $lineno")
+          Seq.empty
+        }
+      }
   }
 }
 
-case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends FieldValue {
+case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends FieldValue with Logging {
 
   val fieldName = splits(1)
   val indexLon = splits(2).toInt
@@ -163,33 +183,39 @@ case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends Fi
     (fieldName + "_" + tokens(0), HexGrid(tokens(1).toDouble, 0.0, 0.0))
   })
 
-  override def parse(splits: Array[String]): Seq[(String, Any)] = {
+  override def parse(splits: Array[String], lineno: Long): Seq[(String, Any)] = {
 
     val list = ArrayBuffer[(String, Any)]()
 
-    val lon = splits(indexLon).toDouble
-    val lat = splits(indexLat).toDouble
+    val aLon = splits(indexLon)
+    val aLat = splits(indexLat)
+    try {
+      val lon = aLon.toDouble
+      val lat = aLat.toDouble
 
-    if (xmin <= lon && lon <= xmax && ymin <= lat && lat <= ymax) {
+      if (xmin <= lon && lon <= xmax && ymin <= lat && lat <= ymax) {
 
-      list.append((fieldName, "%.6f,%.6f".format(lat, lon)))
+        list.append((fieldName, "%.6f,%.6f".format(lat, lon)))
 
-      val xMercator = WebMercator.longitudeToX(lon)
-      val yMercator = WebMercator.latitudeToY(lat)
+        val xMercator = WebMercator.longitudeToX(lon)
+        val yMercator = WebMercator.latitudeToY(lat)
 
-      list.append((fieldName + "_x", xMercator))
-      list.append((fieldName + "_y", yMercator))
+        list.append((fieldName + "_x", xMercator))
+        list.append((fieldName + "_y", yMercator))
 
-      hexGrids.foreach { case (hexKey, hexVal) => {
-        list.append((hexKey, hexVal.convertXYToRowCol(xMercator, yMercator).toText))
+        hexGrids.foreach { case (hexKey, hexVal) => {
+          list.append((hexKey, hexVal.convertXYToRowCol(xMercator, yMercator).toText))
+        }
+        }
+      } else {
+        log.warn(s"($lon,$lat) is not in ($xmin,$ymin,$xmax,$ymax)")
       }
+    } catch {
+      case t: Throwable => {
+        log.warn(s"Cannot parse $aLon or $aLat for field $fieldName at line $lineno")
       }
     }
-    /*
-        else {
-          throw new Exception("Not in valid range")
-        }
-    */
+
     list
   }
 }
