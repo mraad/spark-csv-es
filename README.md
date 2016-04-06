@@ -46,6 +46,10 @@ index.mapping=myindex/mymapping
 #
 input.path=/a/path/to/points.csv
 #
+# Number of header lines to skip
+#
+header.count=0
+#
 # Field separator - default is tab
 #
 field.sep=,

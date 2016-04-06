@@ -33,7 +33,7 @@ case class FieldInt(splits: Array[String]) extends FieldValue with Logging {
         Seq((fieldName, aInt.toInt))
       } catch {
         case _: Throwable => {
-          log.warn(s"Cannot parse $aInt for field $fieldName at line $lineno")
+          log.error(s"Cannot parse $aInt for field $fieldName at line $lineno")
           Seq.empty
         }
       }
@@ -53,7 +53,7 @@ case class FieldFloat(splits: Array[String]) extends FieldValue with Logging {
         Seq((fieldName, aDouble.toDouble))
       } catch {
         case _: Throwable => {
-          log.warn(s"Cannot parse $aDouble for field $fieldName at line $lineno")
+          log.error(s"Cannot parse $aDouble for field $fieldName at line $lineno")
           Seq.empty
         }
       }
@@ -94,7 +94,7 @@ case class FieldDateTime(splits: Array[String]) extends FieldValue with Logging 
         )
       } catch {
         case _: Throwable => {
-          log.warn(s"Cannot parse $aDate for field $fieldName at line $lineno")
+          log.error(s"Cannot parse $aDate for field $fieldName at line $lineno")
           Seq.empty
         }
       }
@@ -128,7 +128,7 @@ case class FieldDate(splits: Array[String]) extends FieldValue with Logging {
         )
       } catch {
         case _: Throwable => {
-          log.warn(s"Cannot parse $aDate for field $fieldName at line $lineno")
+          log.error(s"Cannot parse $aDate for field $fieldName at line $lineno")
           Seq.empty
         }
       }
@@ -157,7 +157,7 @@ case class FieldDateOnly(splits: Array[String]) extends FieldValue with Logging 
         )
       } catch {
         case _: Throwable => {
-          log.warn(s"Cannot parse $aDate for field $fieldName at line $lineno")
+          log.error(s"Cannot parse $aDate for field $fieldName at line $lineno")
           Seq.empty
         }
       }
@@ -208,11 +208,11 @@ case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends Fi
         }
         }
       } else {
-        log.warn(s"($lon,$lat) is not in ($xmin,$ymin,$xmax,$ymax)")
+        log.error(s"($lon,$lat) is not in ($xmin,$ymin,$xmax,$ymax)")
       }
     } catch {
       case t: Throwable => {
-        log.warn(s"Cannot parse $aLon or $aLat for field $fieldName at line $lineno")
+        log.error(s"Cannot parse $aLon or $aLat for field $fieldName at line $lineno")
       }
     }
 
