@@ -50,6 +50,10 @@ input.path=/a/path/to/points.csv
 #
 header.count=0
 #
+# Throw an exception on parsing error
+#
+error.exception=true
+#
 # Field separator - default is tab
 #
 field.sep=,
