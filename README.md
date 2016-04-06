@@ -119,7 +119,7 @@ Make sure to first clone and install the following projects:
 $ mvn install
 ```
 
-This will create the Spark Job `spark-csv-es-1.0.jar` in the `target` folder.
+This will create the Spark Job `spark-csv-es-1.3.1.jar` in the `target` folder.
 
 ## Walk Through Example
 
@@ -220,7 +220,7 @@ is appended to the value of your `PATH` environment variable.
 Bulk load the CSV by submitting the following spark job:
 
 ```shell
-$ spark-submit spark-csv-es-1.0.jar DC_311_2010.properties
+$ spark-submit spark-csv-es-1.3.1.jar DC_311_2010.properties
 ```
 
 The data shards and replications can be seen in the kopf web dashboard:
