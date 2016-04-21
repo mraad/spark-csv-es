@@ -2,8 +2,8 @@
 #
 # pip install pyjavaproperties
 #
-import os
 import json
+import os
 
 import sys
 from pyjavaproperties import Properties
@@ -77,6 +77,10 @@ def main():
     basename, extension = os.path.splitext(sys.argv[1])
     with open(basename + ".json", "wb") as fw:
         fw.write(json.dumps(doc, ensure_ascii=False, indent=2))
+
+    base = os.path.basename(sys.argv[1])
+    name = os.path.splitext(base)[0]
+    print("Post Example: curl -XPOST localhost:9200/{}?pretty -d @{}.json".format(name.lower(), basename))
 
 
 if __name__ == '__main__':
