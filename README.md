@@ -298,4 +298,3 @@ This is _cooperative processing_ between the client and the server, a term I use
 
 * Convert configuration file to JSON format
 * Convert the bulk loader to a Tool in a Toolbox.
-d
