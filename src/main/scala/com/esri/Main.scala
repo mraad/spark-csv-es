@@ -48,7 +48,15 @@ object Main extends App with Logging {
       val properties = new Properties()
       properties.load(reader)
       properties.asScala.foreach { case (k, v) => {
-        sparkConf.set(k, v)
+        // TODO - make more complex
+        // http://stackoverflow.com/questions/2263929/regarding-application-properties-file-and-environment-variable
+        // https://github.com/typesafehub/config
+        if (v.startsWith("${") && v.endsWith("}")) {
+          val env = v.substring(2, v.length - 2)
+          sparkConf.set(k, scala.util.Properties.envOrElse(env, v))
+        }
+        else
+          sparkConf.set(k, v)
       }
       }
     }
