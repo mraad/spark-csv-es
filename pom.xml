@@ -14,9 +14,6 @@
         <scala.version>2.10.4</scala.version>
         <spark.version>1.6.1</spark.version>
         <java.version>1.8</java.version>
-        <!--
-                <es-hadoop.version>2.2.0-rc1</es-hadoop.version>
-        -->
         <es-hadoop.version>2.3.1</es-hadoop.version>
     </properties>
 
