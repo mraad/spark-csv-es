@@ -297,4 +297,4 @@ This is _cooperative processing_ between the client and the server, a term I use
 #### TODO
 
 * Convert configuration file to JSON format
-* Convert the bulk loader to a Tool in a Toolbox.
+* Convert the bulk loader to a Tool in a Toolbox
