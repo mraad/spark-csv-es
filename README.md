@@ -112,8 +112,8 @@ Make sure to first clone and install the following projects:
 
 * [Web Mercator](https://github.com/mraad/WebMercator)
 * [Hex Grid](https://github.com/mraad/hex-grid)
-* ~[Elasticsearch Hadoop](https://github.com/elastic/elasticsearch-hadoop)~
-* ~[Univocity Parsers](https://github.com/uniVocity/univocity-parsers)~
+* ~~[Elasticsearch Hadoop](https://github.com/elastic/elasticsearch-hadoop)~~
+* ~~[Univocity Parsers](https://github.com/uniVocity/univocity-parsers)~~
 
 ```shell
 $ mvn install
