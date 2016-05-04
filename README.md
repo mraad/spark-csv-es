@@ -119,6 +119,12 @@ Make sure to first clone and install the following projects:
 $ mvn install
 ```
 
+To build the project to be used in the [Cloudera Docker Container](http://www.cloudera.com/documentation/enterprise/5-6-x/topics/quickstart_docker_container.html)
+
+```shell
+mvn -Pquickstart clean package
+```
+
 This will create the Spark Job `spark-csv-es-2.3.1.jar` in the `target` folder.
 
 ## Walk Through Example
