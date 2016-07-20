@@ -194,8 +194,6 @@ case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends Fi
   val xmax = conf.getOrElse("xmax", "180.0").toDouble
   val ymax = conf.getOrElse("ymax", "90.0").toDouble
 
-  // val hexOrigX = conf.getOrElse("hex.orig.x", "0.0").toDouble
-  // val hexOrigY = conf.getOrElse("hex.orig.y", "0.0").toDouble
   val hexSizes = conf.getOrElse("hex.sizes", "100,100")
   val hexGrids = hexSizes.split(';').map(hexDef => {
     val tokens = hexDef.split(',')
