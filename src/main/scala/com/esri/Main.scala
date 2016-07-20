@@ -29,6 +29,7 @@ object Main extends App with Logging {
     classOf[FieldFloat],
     classOf[FieldInt],
     classOf[FieldGeo],
+    classOf[FieldGrid],
     classOf[FieldString],
     classOf[CSVReader],
     classOf[HexGrid],
@@ -82,6 +83,7 @@ object Main extends App with Logging {
       .map(splits => {
         splits(0) match {
           case "geo" => FieldGeo(confMap, splits)
+          case "grid" => FieldGrid(confMap, splits)
           case "int" => FieldInt(splits)
           case "float" => FieldFloat(splits)
           case "date" => FieldDate(splits)
