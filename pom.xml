@@ -61,6 +61,10 @@
                     <groupId>org.apache.spark</groupId>
                     <artifactId>spark-sql_${scala.compact.version}</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-library</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
