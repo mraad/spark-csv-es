@@ -47,6 +47,8 @@ def main():
             properties[tokens[1]] = {"type": "long"}
         elif tokens[0] == 'float':
             properties[tokens[1]] = {"type": "float"}
+        elif tokens[0] == 'double':
+            properties[tokens[1]] = {"type": "float"}
         elif tokens[0] == 'date' or tokens[0] == 'date-time':
             name = tokens[1]
             properties[name] = {"type": "date", "format": "YYYY-MM-dd HH:mm:ss"}

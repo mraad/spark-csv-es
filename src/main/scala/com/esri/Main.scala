@@ -86,6 +86,7 @@ object Main extends App with Logging {
           case "grid" => FieldGrid(confMap, splits)
           case "int" => FieldInt(splits)
           case "float" => FieldFloat(splits)
+          case "double" => FieldFloat(splits)
           case "date" => FieldDate(splits)
           case "date-time" => FieldDateTime(splits)
           case "date-only" => FieldDateOnly(splits)

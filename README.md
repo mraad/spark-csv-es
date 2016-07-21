@@ -78,10 +78,12 @@ hex.sizes=\
 # oid - optional document identifier field
 # geo - the last two parameters indicate the lon and lat field indexes in the csv file.
 # date - the last parameter indicates how to parse the csv date field.
+# grid - field name, lon index, lat index, grid size in meters
 #
 fields=\
   oid,object_id,0;\
   geo,loc,1,2;\
+  grid,gid,1,2,1000\
   date,a_date,3,YYYY-MM-dd;\
   string,a_string,4;\
   int,a_int,4;\
@@ -104,7 +106,15 @@ The fields of type `geo` will be expanded to additional properties of type `inte
 * property_y - the location y web mercator meter
 * property_hexlabel - the location hexagonal index
 
-For the above sample, the following properties will be created; `loc_x`, `loc_y`, `loc_50`, `loc_100`, `loc_1K`
+For the above sample, the following properties will be created: `loc_x`, `loc_y`, `loc_50`, `loc_100`, `loc_1K`
+
+The fields of type `grid` will be expanded to additional properties:
+
+* property_x - the location x web mercator meter
+* property_y - the location y web mercator meter
+* property_g - string formatted as floor(mercator_x/grid_size) + ":" + floor(mercator_y/grid_size)
+
+For the above sample, the following properties will be created: `gid_x`, `gid_y`, `gid_g`
 
 ### Building the Project
 
@@ -215,7 +225,7 @@ Make sure to first install the [elasticsearch-py](https://www.elastic.co/guide/e
 ```shell
 $ pip install elasticsearch
 ```
-,   
+
 ![](media/createindex.png)
 
 ## Bulk Load CSV using Spark
