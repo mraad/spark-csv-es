@@ -42,6 +42,10 @@ es.mapping.id=object_id
 #
 index.mapping=myindex/mymapping
 #
+# Specify input coordinate spatial reference - ie: http://spatialreference.org/ref/epsg/wgs-84/
+#
+input.epsg=EPSG:4326
+#
 # The CSV input path
 #
 input.path=/a/path/to/points.csv
@@ -55,7 +59,7 @@ header.count=0
 error.exception=true
 #
 # Field separator - default is tab
-# If the value starts with 0 then it is conveted to hex and then a char 
+# If the value starts with 0 then it is conveted to hex number and then it is then converted a char 
 #
 field.sep=,
 #
