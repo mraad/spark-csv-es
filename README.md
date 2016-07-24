@@ -42,7 +42,8 @@ es.mapping.id=object_id
 #
 index.mapping=myindex/mymapping
 #
-# Specify input coordinate spatial reference - ie: http://spatialreference.org/ref/epsg/wgs-84/
+# Specify input coordinate spatial reference
+# For example: http://spatialreference.org/ref/epsg/wgs-84/
 #
 input.epsg=EPSG:4326
 #
