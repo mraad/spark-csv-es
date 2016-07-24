@@ -2,6 +2,7 @@ package com.esri
 
 import com.esri.hex.HexGrid
 import org.apache.spark.Logging
+import org.osgeo.proj4j.{CRSFactory, CoordinateTransformFactory, ProjCoordinate}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -253,30 +254,54 @@ case class FieldGrid(conf: Map[String, String], splits: Array[String]) extends F
   val xmax = conf.getOrElse("xmax", "180.0").toDouble
   val ymax = conf.getOrElse("ymax", "90.0").toDouble
 
+  @transient
+  lazy val csFactory = new CRSFactory
+  @transient
+  lazy val origCS = csFactory.createFromName(conf.getOrElse("input.epsg", "EPSG:4326"))
+  @transient
+  lazy val webCS = csFactory.createFromName("EPSG:3857")
+  @transient
+  lazy val wgsCS = csFactory.createFromName("EPSG:4326")
+
+  @transient
+  lazy val ctFactory = new CoordinateTransformFactory
+  @transient
+  lazy val orig2web = ctFactory.createTransform(origCS, webCS)
+  @transient
+  lazy val orig2wgs = ctFactory.createTransform(origCS, wgsCS)
+
+  @transient
+  lazy val orig = new ProjCoordinate
+  @transient
+  lazy val webCoord = new ProjCoordinate
+  @transient
+  lazy val wgsCoord = new ProjCoordinate
+
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[(String, Any)] = {
 
-    val aLon = splits(indexLon)
-    val aLat = splits(indexLat)
+    val textX = splits(indexLon)
+    val textY = splits(indexLat)
     try {
-      val lon = aLon.toDouble
-      val lat = aLat.toDouble
+      orig.x = textX.toDouble
+      orig.y = textY.toDouble
 
-      if (xmin <= lon && lon <= xmax && ymin <= lat && lat <= ymax) {
+      if (xmin <= orig.x && orig.x <= xmax && ymin <= orig.y && orig.y <= ymax) {
 
-        val xMercator = WebMercator.longitudeToX(lon)
-        val yMercator = WebMercator.latitudeToY(lat)
-        val gx = math.floor(xMercator / gridSize).toInt
-        val gy = math.floor(yMercator / gridSize).toInt
+        orig2web.transform(orig, webCoord)
+        orig2wgs.transform(orig, wgsCoord)
+
+        val gx = math.floor(webCoord.x / gridSize).toInt
+        val gy = math.floor(webCoord.y / gridSize).toInt
 
         Seq(
-          fieldName -> "%.6f,%.6f".format(lat, lon),
-          fieldName + "_x" -> xMercator,
-          fieldName + "_y" -> yMercator,
+          fieldName -> "%.6f,%.6f".format(wgsCoord.y, wgsCoord.x),
+          fieldName + "_x" -> webCoord.x,
+          fieldName + "_y" -> webCoord.y,
           fieldName + "_g" -> s"$gx:$gy"
         )
 
       } else {
-        log.error(s"($lon,$lat) is not in ($xmin,$ymin,$xmax,$ymax)")
+        log.error(s"(${orig.x},${orig.y}) is not in ($xmin,$ymin,$xmax,$ymax)")
         if (throwException)
           throw new Exception()
         else
@@ -284,7 +309,8 @@ case class FieldGrid(conf: Map[String, String], splits: Array[String]) extends F
       }
     } catch {
       case t: Throwable => {
-        log.error(s"Cannot parse $aLon or $aLat for field $fieldName at line $lineno")
+        // t.printStackTrace()
+        log.error(s"Cannot parse $textX or $textY for field $fieldName at line $lineno")
         if (throwException)
           throw t
         else

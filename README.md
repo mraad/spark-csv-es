@@ -55,6 +55,7 @@ header.count=0
 error.exception=true
 #
 # Field separator - default is tab
+# If the value starts with 0 then it is conveted to hex and then a char 
 #
 field.sep=,
 #

@@ -94,7 +94,8 @@ object Main extends App with Logging {
         }
       })
     val acc = sc.accumulator[Int](0)
-    val fieldSep = conf.get("field.sep", "\t")(0)
+    val fieldSepProp = conf.get("field.sep", "\t")
+    val fieldSep = if (fieldSepProp.startsWith("0")) Integer.parseInt(fieldSepProp, 16).toChar else fieldSepProp.charAt(0)
     val headerCount = conf.getInt("header.count", 0) - 1
     val throwException = conf.getBoolean("error.exception", true)
     val csvReader = new CSVReader(fieldSep)
