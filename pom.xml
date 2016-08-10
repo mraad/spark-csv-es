@@ -278,7 +278,7 @@
             <id>cdh</id>
             <properties>
                 <java.version>1.7</java.version>
-                <spark.version>1.5.0-cdh5.5.0</spark.version>
+                <spark.version>1.6.0-cdh5.7.0</spark.version>
                 <spark.scope>provided</spark.scope>
             </properties>
             <dependencies>
