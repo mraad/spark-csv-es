@@ -5,13 +5,13 @@
 
     <groupId>com.esri</groupId>
     <artifactId>spark-csv-es</artifactId>
-    <version>2.4.1</version>
+    <version>2.4.2</version>
     <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <scala.compact.version>2.10</scala.compact.version>
-        <scala.version>2.10.4</scala.version>
+        <scala.compact>2.10</scala.compact>
+        <scala.version>${scala.compact}.6</scala.version>
         <es-hadoop.version>2.3.3</es-hadoop.version>
     </properties>
 
@@ -43,7 +43,7 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_${scala.compact.version}</artifactId>
+            <artifactId>spark-core_${scala.compact}</artifactId>
             <version>${spark.version}</version>
             <scope>${spark.scope}</scope>
         </dependency>
@@ -54,12 +54,12 @@
         </dependency>
         <dependency>
             <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch-spark_${scala.compact.version}</artifactId>
+            <artifactId>elasticsearch-spark_${scala.compact}</artifactId>
             <version>${es-hadoop.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.spark</groupId>
-                    <artifactId>spark-sql_${scala.compact.version}</artifactId>
+                    <artifactId>spark-sql_${scala.compact}</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.scala-lang</groupId>
@@ -70,7 +70,7 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.9.3</version>
+            <version>2.9.4</version>
         </dependency>
         <dependency>
             <groupId>org.joda</groupId>
@@ -95,11 +95,11 @@
         <dependency>
             <groupId>com.univocity</groupId>
             <artifactId>univocity-parsers</artifactId>
-            <version>2.2.0</version>
+            <version>2.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_${scala.compact.version}</artifactId>
+            <artifactId>scalatest_${scala.compact}</artifactId>
             <version>2.2.3</version>
             <scope>test</scope>
         </dependency>
@@ -111,7 +111,7 @@
                 <plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
-                    <version>3.2.1</version>
+                    <version>3.2.2</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -119,7 +119,7 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.2.2</version>
                 <executions>
                     <execution>
                         <id>scala-compile-first</id>
@@ -137,7 +137,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <scalaCompatVersion>${scala.compact.version}</scalaCompatVersion>
+                    <scalaCompatVersion>${scala.compact}</scalaCompatVersion>
                     <scalaVersion>${scala.version}</scalaVersion>
                     <recompileMode>incremental</recompileMode>
                     <useZincServer>false</useZincServer>
@@ -146,7 +146,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.5.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -275,10 +275,26 @@
             </properties>
         </profile>
         <profile>
-            <id>cdh</id>
+            <id>1.6.0-cdh5.7.0</id>
             <properties>
                 <java.version>1.7</java.version>
                 <spark.version>1.6.0-cdh5.7.0</spark.version>
+                <spark.scope>provided</spark.scope>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.xerial.snappy</groupId>
+                    <artifactId>snappy-java</artifactId>
+                    <version>1.1.2.4</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>spark-1.4.1-bin-hadoop2.6</id>
+            <properties>
+                <java.version>1.7</java.version>
+                <spark.version>1.4.1</spark.version>
                 <spark.scope>provided</spark.scope>
             </properties>
             <dependencies>

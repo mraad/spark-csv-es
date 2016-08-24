@@ -138,10 +138,16 @@ $ mvn install
 To build the project to be used in the [Cloudera Docker Container](http://www.cloudera.com/documentation/enterprise/5-6-x/topics/quickstart_docker_container.html)
 
 ```shell
-mvn -Pquickstart clean package
+mvn -P1.6.0-cdh5.7.0 clean package
 ```
 
-This will create the Spark Job `spark-csv-es-2.3.1.jar` in the `target` folder.
+To build the project to use `spark-1.4.1-bin-hadoop2.6`
+
+```shell
+mvn -Pspark-1.4.1-bin-hadoop2.6 clean package
+```
+
+This will create the Spark Job `spark-csv-es-2.4.2.jar` in the `target` folder.
 
 ## Walk Through Example
 
@@ -242,7 +248,7 @@ is appended to the value of your `PATH` environment variable.
 Bulk load the CSV by submitting the following spark job:
 
 ```shell
-$ spark-submit spark-csv-es-2.3.1.jar DC_311_2010.properties
+$ spark-submit spark-csv-es-2.4.2.jar DC_311_2010.properties
 ```
 
 The data shards and replications can be seen in the kopf web dashboard:

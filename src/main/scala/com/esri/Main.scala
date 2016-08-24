@@ -109,7 +109,8 @@ object Main extends App with Logging {
         }
         catch {
           case t: Throwable => {
-            // log.error(s"Cannot parse line $lineno ($line)")
+            // val err = t.toString()
+            // log.error(s"Cannot parse line $lineno $line $err")
             acc += 1
             None
           }
