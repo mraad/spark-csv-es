@@ -152,44 +152,6 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <!--
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-dependency-plugin</artifactId>
-                            <version>2.10</version>
-                            <executions>
-                                <execution>
-                                    <id>copy-dependencies</id>
-                                    <phase>prepare-package</phase>
-                                    <goals>
-                                        <goal>copy-dependencies</goal>
-                                    </goals>
-                                    <configuration>
-                                        <outputDirectory>${project.build.directory}/libs</outputDirectory>
-                                        <overWriteReleases>false</overWriteReleases>
-                                        <overWriteSnapshots>false</overWriteSnapshots>
-                                        <overWriteIfNewer>true</overWriteIfNewer>
-                                        <includeScope>runtime</includeScope>
-                                        <excludeScope>test</excludeScope>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-jar-plugin</artifactId>
-                            <version>2.6</version>
-                            <configuration>
-                                <archive>
-                                    <manifest>
-                                        <mainClass>com.esri.Main</mainClass>
-                                        <addClasspath>true</addClasspath>
-                                        <classpathPrefix>libs/</classpathPrefix>
-                                    </manifest>
-                                </archive>
-                            </configuration>
-                        </plugin>
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

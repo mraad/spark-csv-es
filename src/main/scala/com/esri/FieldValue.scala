@@ -18,7 +18,7 @@ case class FieldString(splits: Array[String]) extends FieldValue {
 
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[Pair[String, Any]] = {
     val aText = splits(index)
-    if (aText == null) Seq.empty else Seq((fieldName, aText))
+    if (aText.isEmpty) Seq.empty else Seq((fieldName, aText))
   }
 }
 
@@ -28,7 +28,7 @@ case class FieldInt(splits: Array[String]) extends FieldValue with Logging {
 
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[Pair[String, Any]] = {
     val aInt = splits(index)
-    if (aInt == null || aInt.isEmpty)
+    if (aInt.isEmpty)
       Seq.empty
     else if (aInt.toLowerCase.startsWith("null"))
       Seq.empty
@@ -53,7 +53,7 @@ case class FieldFloat(splits: Array[String]) extends FieldValue with Logging {
 
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[Pair[String, Any]] = {
     val aDouble = splits(index)
-    if (aDouble == null || aDouble.isEmpty)
+    if (aDouble.isEmpty)
       Seq.empty
     else if (aDouble.toLowerCase.startsWith("null"))
       Seq.empty
@@ -91,7 +91,7 @@ case class FieldDateTime(splits: Array[String]) extends FieldValue with Logging 
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[(String, Any)] = {
     val aDate = splits(indexDate)
     val aTime = splits(indexTime)
-    if (aDate == null || aTime == null || aDate.isEmpty || aTime.isEmpty || aDate.toLowerCase.startsWith("null"))
+    if (aDate.isEmpty || aTime.isEmpty || aDate.toLowerCase.startsWith("null"))
       Seq.empty
     else {
       try {
@@ -128,7 +128,7 @@ case class FieldDate(splits: Array[String]) extends FieldValue with Logging {
 
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[(String, Any)] = {
     val aDate = splits(index)
-    if (aDate == null || aDate.isEmpty || aDate.toLowerCase.startsWith("null"))
+    if (aDate.isEmpty || aDate.toLowerCase.startsWith("null"))
       Seq.empty
     else {
       try {
@@ -165,7 +165,7 @@ case class FieldDateOnly(splits: Array[String]) extends FieldValue with Logging 
 
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[(String, Any)] = {
     val aDate = splits(index)
-    if (aDate == null || aDate.isEmpty || aDate.toLowerCase.startsWith("null"))
+    if (aDate.isEmpty || aDate.toLowerCase.startsWith("null"))
       Seq.empty
     else
       try {

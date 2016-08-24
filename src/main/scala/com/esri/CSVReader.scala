@@ -27,6 +27,7 @@ class CSVReader(fieldSep: Char = ',',
     settings.setInputBufferSize(inputBufSize)
     settings.setMaxColumns(maxCols)
     settings.setNullValue("")
+    settings.setEmptyValue("")
 
     new CsvParser(settings)
   }
