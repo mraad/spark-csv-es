@@ -102,25 +102,25 @@ class HexTool(BaseTool):
     def execute(self, parameters, messages):
         arcpy.env.overwriteOutput = True
         try:
-            cellValue = parameters[0].value
-            if cellValue == "10":
+            cell_value = parameters[0].value
+            if cell_value == "10":
                 size = 10
                 key = "loc_10"
-            elif cellValue == "100":
+            elif cell_value == "100":
                 size = 100
                 key = "loc_100"
-            elif cellValue == "200":
+            elif cell_value == "200":
                 size = 200
                 key = "loc_200"
-            elif cellValue == "500":
+            elif cell_value == "500":
                 size = 500
                 key = "loc_500"
-            elif cellValue == "1K":
+            elif cell_value == "1K":
                 size = 1000
                 key = "loc_1K"
 
-            hexcell = HexCell(size=size)
-            hexgrid = HexGrid(size=size)
+            hex_cell = HexCell(size=size)
+            hex_grid = HexGrid(size=size)
 
             where = parameters[1].value
             name = parameters[2].value
@@ -152,10 +152,10 @@ class HexTool(BaseTool):
                     rc = col1.split(":")
                     r = float(rc[0])
                     c = float(rc[1])
-                    xy = hexgrid.rc2xy(r, c)
+                    xy = hex_grid.rc2xy(r, c)
                     x = float(xy[0])
                     y = float(xy[1])
-                    cursor.insertRow([hexcell.toShape(x, y), col2])
+                    cursor.insertRow([hex_cell.toShape(x, y), col2])
             del doc
             parameters[3].value = fc
         except:

@@ -246,10 +246,13 @@ case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends Fi
   val xmax = conf.getOrElse("xmax", "180.0").toDouble
   val ymax = conf.getOrElse("ymax", "90.0").toDouble
 
+  val gridX = conf.getOrElse("hex.x", "0.0").toDouble
+  val gridY = conf.getOrElse("hex.y", "0.0").toDouble
+
   val hexSizes = conf.getOrElse("hex.sizes", "100,100")
   val hexGrids = hexSizes.split(';').map(hexDef => {
     val tokens = hexDef.split(',')
-    (fieldName + "_" + tokens(0), HexGrid(tokens(1).toDouble, 0.0, 0.0))
+    (fieldName + "_" + tokens(0), HexGrid(tokens(1).toDouble, gridX, gridY))
   })
 
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[(String, Any)] = {

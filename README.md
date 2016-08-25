@@ -66,6 +66,19 @@ error.exception=true
 #
 field.sep=,
 #
+# The hexagon grid origin in mercator values - default are (0.0,0.0)
+# Set values to -20000000.0 to make the row and col hex cell values be positive
+#
+hex.x=0.0
+hex.y=0.0
+#
+# Geo field x/y bounding values. Considered inside when xmin <= geo.x <= xmax and ymin <= geo.y <= ymax
+#
+xmin=-180.0
+ymin=-90
+xmax=180.0
+ymax=90.0
+#
 # The hexagon indexes to generate for each geo type field.
 #
 # format: label1,size1[;label2,size2] ...
