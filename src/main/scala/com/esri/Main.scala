@@ -23,6 +23,7 @@ object Main extends App with Logging {
     // .set(ConfigurationOptions.ES_WRITE_OPERATION, ConfigurationOptions.ES_OPERATION_UPSERT)
     .registerKryoClasses(Array(
     classOf[FieldDate],
+    classOf[FieldDateISO],
     classOf[FieldDateTime],
     classOf[FieldDateOnly],
     classOf[FieldValue],
@@ -57,8 +58,8 @@ object Main extends App with Logging {
           // http://stackoverflow.com/questions/2263929/regarding-application-properties-file-and-environment-variable
           // https://github.com/typesafehub/config
           if (v.startsWith("${") && v.endsWith("}")) {
-            val env = v.substring(2, v.length - 1)
-            val envVal = scala.util.Properties.envOrElse(env, v)
+            val envKey = v.substring(2, v.length - 1)
+            val envVal = scala.util.Properties.envOrElse(envKey, v)
             sparkConf.set(k, envVal)
           }
           else
@@ -88,6 +89,7 @@ object Main extends App with Logging {
           case "float" => FieldFloat(splits)
           case "double" => FieldFloat(splits)
           case "date" => FieldDate(splits)
+          case "date-iso" => FieldDateISO(splits)
           case "date-time" => FieldDateTime(splits)
           case "date-only" => FieldDateOnly(splits)
           case _ => FieldString(splits)
@@ -103,9 +105,11 @@ object Main extends App with Logging {
       .zipWithIndex()
       .filter(_._2 > headerCount)
       .flatMap { case (line, lineno) => {
+        log.info("{} {}", lineno, line)
         try {
           val splits = csvReader.parseCSV(line)
-          Some(fields.flatMap(_.parse(splits, lineno, throwException)).toMap)
+          val map = fields.flatMap(_.parse(splits, lineno, throwException)).toMap
+          Some(map)
         }
         catch {
           case t: Throwable => {

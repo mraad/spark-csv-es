@@ -1,5 +1,7 @@
 # Spark CSV ES
 
+**Update - Aug 24, 2016 - Please start using `date-iso` rather that `date`, as it places in ES the date values in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format.** 
+
 This project is divided into 2 sub-projects:
 
 1. A bulk loader of one or more CSV files with spatial and temporal content into Elasticsearch.
@@ -83,20 +85,20 @@ hex.sizes=\
 #
 # oid - optional document identifier field
 # geo - the last two parameters indicate the lon and lat field indexes in the csv file.
-# date - the last parameter indicates how to parse the csv date field.
+# date-iso - the last parameter indicates how to parse the csv date field.
 # grid - field name, lon index, lat index, grid size in meters
 #
 fields=\
   oid,object_id,0;\
   geo,loc,1,2;\
   grid,gid,1,2,1000\
-  date,a_date,3,YYYY-MM-dd;\
+  date-iso,a_date,3,YYYY-MM-dd HH:mm:ss;\
   string,a_string,4;\
   int,a_int,4;\
   float,a_float,5
 ```
 
-The fields of type `date` will be expanded to additional properties of type `integer` named in the following convention:
+The fields of type `date-iso` will be expanded to additional properties of type `integer` named in the following convention:
 
 * property_yy - the date year
 * property_mm - the date month
@@ -104,7 +106,15 @@ The fields of type `date` will be expanded to additional properties of type `int
 * property_hh - the date hour
 * property_dow - the date day of week
 
-The `date` fields are parsed using [joda](http://joda-time.sourceforge.net/apidocs/org/joda/time/format/DateTimeFormat.html) 
+The `date-iso` fields are parsed using [joda](http://joda-time.sourceforge.net/apidocs/org/joda/time/format/DateTimeFormat.html)
+and should be mapped to the following ES property as an example:
+
+```json
+"a_date": {
+  "type": "date",
+  "format": "date_optional_time"
+}
+```
 
 The fields of type `geo` will be expanded to additional properties of type `integer` named in the following convention:
 
@@ -322,7 +332,11 @@ The conversion from row/column to an array of coordinates that make up the polyg
 Retuning indexes massively reduces the network payload and makes the server do less work because the polygon coordinates generation is offloaded to the client. 
 This is _cooperative processing_ between the client and the server, a term I used to use 20 years ago on [SDE](http://www.esri.com/software/arcgis/arcsde) when I was a specialist on it !
 
-#### TODO
+### TODO
 
 * Convert configuration file to JSON format
 * Convert the bulk loader to a Tool in a Toolbox
+
+### References
+
+- <https://github.com/elastic/elasticsearch-hadoop/issues/624>
