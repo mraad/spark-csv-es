@@ -105,7 +105,7 @@ object Main extends App with Logging {
       .zipWithIndex()
       .filter(_._2 > headerCount)
       .flatMap { case (line, lineno) => {
-        log.info("{} {}", lineno, line)
+        // log.info("{} {}", lineno, line)
         try {
           val splits = csvReader.parseCSV(line)
           val map = fields.flatMap(_.parse(splits, lineno, throwException)).toMap
