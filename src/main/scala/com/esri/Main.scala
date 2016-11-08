@@ -15,9 +15,9 @@ object Main extends App with Logging {
 
   val sparkConf = new SparkConf()
     .setAppName(Main.getClass.getSimpleName)
-    .setMaster("local[*]")
-    .set("spark.driver.memory", "16g")
-    .set("spark.executor.memory", "16g")
+    // .setMaster("local[*]")
+    // .set("spark.driver.memory", "16g")
+    // .set("spark.executor.memory", "16g")
     // .set(ConfigurationOptions.ES_NODES, "local192")
     // .set(ConfigurationOptions.ES_MAPPING_ID, "object_id")
     // .set(ConfigurationOptions.ES_WRITE_OPERATION, ConfigurationOptions.ES_OPERATION_UPSERT)
@@ -80,6 +80,7 @@ object Main extends App with Logging {
     val fields = conf.get("fields", "oid,object_id,-1")
       .split(';')
       .map(_.split(','))
+      .filter(_.length > 2)
       .filterNot(splits => splits(2) == "-1")
       .map(splits => {
         splits(0) match {
@@ -105,7 +106,6 @@ object Main extends App with Logging {
       .zipWithIndex()
       .filter(_._2 > headerCount)
       .flatMap { case (line, lineno) => {
-        // log.info("{} {}", lineno, line)
         try {
           val splits = csvReader.parseCSV(line)
           val map = fields.flatMap(_.parse(splits, lineno, throwException)).toMap
@@ -113,8 +113,6 @@ object Main extends App with Logging {
         }
         catch {
           case t: Throwable => {
-            // val err = t.toString()
-            // log.error(s"Cannot parse line $lineno $line $err")
             acc += 1
             None
           }
