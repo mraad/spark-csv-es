@@ -51,7 +51,8 @@ def main():
             properties[tokens[1]] = {"type": "float"}
         elif tokens[0] == 'date' or tokens[0] == 'date-time':
             name = tokens[1]
-            properties[name] = {"type": "date", "format": "YYYY-MM-dd HH:mm:ss"}
+            date_format = tokens[3] if len(tokens) == 4 else "YYYY-MM-dd HH:mm:ss"
+            properties[name] = {"type": "date", "format": date_format}
             properties[name + "_yy"] = {"type": "integer"}
             properties[name + "_mm"] = {"type": "integer"}
             properties[name + "_dd"] = {"type": "integer"}
@@ -59,7 +60,8 @@ def main():
             properties[name + "_dow"] = {"type": "integer"}
         elif tokens[0] == 'date-iso':
             name = tokens[1]
-            properties[name] = {"type": "date", "format": "date_optional_time"}
+            date_format = tokens[3] if len(tokens) == 4 else "date_optional_time"
+            properties[name] = {"type": "date", "format": date_format}
             properties[name + "_yy"] = {"type": "integer"}
             properties[name + "_mm"] = {"type": "integer"}
             properties[name + "_dd"] = {"type": "integer"}
@@ -67,7 +69,8 @@ def main():
             properties[name + "_dow"] = {"type": "integer"}
         elif tokens[0] == 'date-only':
             name = tokens[1]
-            properties[name] = {"type": "date", "format": "YYYY-MM-dd HH:mm:ss"}
+            date_format = tokens[3] if len(tokens) == 4 else "YYYY-MM-dd HH:mm:ss"
+            properties[name] = {"type": "date", "format": date_format}
         else:
             name = tokens[1]
             properties[name] = {"type": "string", "index": "not_analyzed"}
