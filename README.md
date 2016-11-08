@@ -131,19 +131,19 @@ and should be mapped to the following ES property as an example:
 
 The fields of type `geo` will be expanded to additional properties of type `integer` named in the following convention:
 
-* property_x - the location x web mercator meter
-* property_y - the location y web mercator meter
+* property_xm - the location x web mercator meter
+* property_ym - the location y web mercator meter
 * property_hexlabel - the location hexagonal index
 
-For the above sample, the following properties will be created: `loc_x`, `loc_y`, `loc_50`, `loc_100`, `loc_1K`
+For the above sample, the following properties will be created: `loc_xm`, `loc_ym`, `loc_50`, `loc_100`, `loc_1K`
 
 The fields of type `grid` will be expanded to additional properties:
 
-* property_x - the location x web mercator meter
-* property_y - the location y web mercator meter
+* property_xm - the location x web mercator meter
+* property_ym - the location y web mercator meter
 * property_g - string formatted as floor(mercator_x/grid_size) + ":" + floor(mercator_y/grid_size)
 
-For the above sample, the following properties will be created: `gid_x`, `gid_y`, `gid_g`
+For the above sample, the following properties will be created: `gid_xm`, `gid_ym`, `gid_g`
 
 ### Building the Project
 
@@ -170,7 +170,7 @@ To build the project to use `spark-1.4.1-bin-hadoop2.6`
 mvn -Pspark-1.4.1-bin-hadoop2.6 clean package
 ```
 
-This will create the Spark Job `spark-csv-es-2.4.2.jar` in the `target` folder.
+This will create the Spark Job `spark-csv-es-[VERSION].jar` in the `target` folder.
 
 ## Walk Through Example
 
@@ -271,7 +271,7 @@ is appended to the value of your `PATH` environment variable.
 Bulk load the CSV by submitting the following spark job:
 
 ```shell
-$ spark-submit spark-csv-es-2.4.2.jar DC_311_2010.properties
+$ spark-submit spark-csv-es-[VERSION].jar DC_311_2010.properties
 ```
 
 The data shards and replications can be seen in the kopf web dashboard:
@@ -285,7 +285,7 @@ The data can be queried using the SQL plugin:
 ## Sample queries
 
 ```sql
-SELECT loc, loc_x, loc_y FROM dc/sr311 limit 32
+SELECT loc, loc_xm, loc_ym FROM dc/sr311 limit 32
 ```
 
 Query the geo locations and associated web mercator values for the first 32 documents.

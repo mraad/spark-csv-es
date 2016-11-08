@@ -273,8 +273,8 @@ case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends Fi
         val xMercator = WebMercator.longitudeToX(lon)
         val yMercator = WebMercator.latitudeToY(lat)
 
-        list.append((fieldName + "_x", xMercator))
-        list.append((fieldName + "_y", yMercator))
+        list.append((fieldName + "_xm", xMercator))
+        list.append((fieldName + "_ym", yMercator))
 
         hexGrids.foreach { case (hexKey, hexVal) => {
           list.append((hexKey, hexVal.convertXYToRowCol(xMercator, yMercator).toText))
@@ -351,8 +351,8 @@ case class FieldGrid(conf: Map[String, String], splits: Array[String]) extends F
 
         Seq(
           fieldName -> "%.6f,%.6f".format(wgsCoord.y, wgsCoord.x),
-          fieldName + "_x" -> webCoord.x,
-          fieldName + "_y" -> webCoord.y,
+          fieldName + "_xm" -> webCoord.x,
+          fieldName + "_ym" -> webCoord.y,
           fieldName + "_g" -> s"$gx:$gy"
         )
 

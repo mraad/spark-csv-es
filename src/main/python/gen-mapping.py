@@ -31,15 +31,15 @@ def main():
         if tokens[0] == 'geo':
             name = tokens[1]
             properties[name] = {"type": "geo_point"}
-            properties[name + "_x"] = {"type": "float", "index": "no"}
-            properties[name + "_y"] = {"type": "float", "index": "no"}
+            properties[name + "_xm"] = {"type": "float", "index": "no"}
+            properties[name + "_ym"] = {"type": "float", "index": "no"}
             for hs in hex_sizes:
                 properties[name + "_" + hs] = {"type": "string", "index": "not_analyzed"}
         elif tokens[0] == 'grid':
             name = tokens[1]
             properties[name] = {"type": "geo_point"}
-            properties[name + "_x"] = {"type": "float", "index": "no"}
-            properties[name + "_y"] = {"type": "float", "index": "no"}
+            properties[name + "_xm"] = {"type": "float", "index": "no"}
+            properties[name + "_ym"] = {"type": "float", "index": "no"}
             properties[name + "_g"] = {"type": "string", "index": "not_analyzed"}
         elif tokens[0] == 'int':
             properties[tokens[1]] = {"type": "integer"}

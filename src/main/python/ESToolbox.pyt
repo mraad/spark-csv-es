@@ -199,7 +199,7 @@ class QueryTool(BaseTool):
 
             url = "http://mansour-mac:9200/_sql"
             params = {
-                'sql': "SELECT loc_x,loc_y,servicecodedescription,zipcode FROM dc/sr311 WHERE loc_100 <> '0:0'" +
+                'sql': "SELECT loc_xm,loc_ym,servicecodedescription,zipcode FROM dc/sr311 WHERE loc_100 <> '0:0'" +
                        where + " LIMIT 100000"
             }
             data = urllib.urlencode(params)
@@ -209,8 +209,8 @@ class QueryTool(BaseTool):
             with arcpy.da.InsertCursor(fc, ['SHAPE@XY', 'SERVICE', 'ZIPCODE']) as cursor:
                 for hit in doc['hits']['hits']:
                     src = hit['_source']
-                    x = float(src['loc_x'])
-                    y = float(src['loc_y'])
+                    x = float(src['loc_xm'])
+                    y = float(src['loc_ym'])
                     service = src['servicecodedescription']
                     zipcode = src['zipcode']
                     cursor.insertRow([(x, y), service, zipcode])

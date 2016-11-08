@@ -43,11 +43,11 @@
         "resolutiondate_mm": {
           "type": "integer"
         },
-        "loc_x": {
+        "loc_xm": {
           "index": "no",
           "type": "float"
         },
-        "loc_y": {
+        "loc_ym": {
           "index": "no",
           "type": "float"
         },
