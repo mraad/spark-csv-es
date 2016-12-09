@@ -11,10 +11,10 @@ from pyjavaproperties import Properties
 
 def main():
     if len(sys.argv) == 1:
-        sys.exit('Usage: %s <file.properties>' % sys.argv[0])
+        sys.exit('Usage: {} <file.properties>'.format(sys.argv[0]))
 
     if not os.path.exists(sys.argv[1]):
-        sys.exit('Error: %s does not exist !' % sys.argv[1])
+        sys.exit('Error: {} does not exist !'.format(sys.argv[1]))
 
     p = Properties()
     p.load(open(sys.argv[1]))

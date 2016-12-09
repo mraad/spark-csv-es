@@ -8,10 +8,10 @@ import sys
 
 def main():
     if len(sys.argv) != 2:
-        sys.exit('Usage: %s your-file.csv' % sys.argv[0])
+        sys.exit('Usage: {} your-file.csv'.format(sys.argv[0]))
 
     if not os.path.exists(sys.argv[1]):
-        sys.exit('Error: %s does not exist !' % sys.argv[1])
+        sys.exit('Error: {} does not exist !'.format(sys.argv[1]))
 
     with open(sys.argv[1], "rb") as fr:
         header = fr.readline().rstrip()
@@ -36,10 +36,10 @@ def main():
         with open(fullpath + ".properties", "wb") as fw:
             fw.write("spark.master=local[*]\n")
             fw.write("spark.app.id=CSV TO ES {}\n".format(name))
-            fw.write("spark.driver.memory=8g\n")
+            # fw.write("spark.driver.memory=8g\n")
             fw.write("spark.executor.memory=12g\n")
-            fw.write("es.nodes=local192\n")
-            fw.write("index.mapping={}/data\n".format(name.lower()))
+            fw.write("es.nodes=localhost\n")
+            fw.write("index.mapping={}/geo\n".format(name.lower()))
             fw.write("hex.sizes=10,10;25,25;50,50;100,100;200,200;500,500\n")
             fw.write("input.path={}\n".format(sys.argv[1]))
             fw.write("field.sep={}\n".format(field_sep))

@@ -1,22 +1,7 @@
-*.class
-*.log
+.idea/
+target/
 
-.idea
+*.sh
 *.iml
 
-# sbt specific
-.cache
-.history
-.lib/
-target/
-lib_managed/
-src_managed/
-project/boot/
-project/plugins/project/
-
-# Scala-IDE specific
-.scala_dependencies
-.worksheet
-
 dependency-reduced-pom.xml
-*-old.py

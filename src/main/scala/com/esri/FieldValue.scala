@@ -19,7 +19,6 @@ case class FieldString(splits: Array[String]) extends FieldValue with Logging {
 
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[(String, Any)] = {
     val aText = splits(index)
-    // log.debug(s"$fieldName $aText")
     if (aText.isEmpty) Seq.empty else Seq((fieldName, aText))
   }
 }
@@ -29,11 +28,12 @@ case class FieldInt(splits: Array[String]) extends FieldValue with Logging {
   val index = splits(2).toInt
 
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[Pair[String, Any]] = {
-    val aInt = splits(index)
-    // log.debug(s"$fieldName $aInt")
+    val aInt = splits(index).toLowerCase
     if (aInt.isEmpty)
       Seq.empty
-    else if (aInt.toLowerCase.startsWith("null"))
+    else if (aInt.startsWith("null"))
+      Seq.empty
+    else if (aInt.startsWith("undefined"))
       Seq.empty
     else
       try {
@@ -55,11 +55,12 @@ case class FieldFloat(splits: Array[String]) extends FieldValue with Logging {
   val index = splits(2).toInt
 
   override def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[Pair[String, Any]] = {
-    val aDouble = splits(index)
-    // log.debug(s"$fieldName $aDouble")
+    val aDouble = splits(index).toLowerCase
     if (aDouble.isEmpty)
       Seq.empty
-    else if (aDouble.toLowerCase.startsWith("null"))
+    else if (aDouble.startsWith("null"))
+      Seq.empty
+    else if (aDouble.startsWith("undefined"))
       Seq.empty
     else
       try {
