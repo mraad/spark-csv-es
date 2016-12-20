@@ -5,7 +5,7 @@
 
     <groupId>com.esri</groupId>
     <artifactId>spark-csv-es</artifactId>
-    <version>2.4.8</version>
+    <version>3.0.1</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -46,17 +46,33 @@
             <artifactId>spark-core_${scala.compact}</artifactId>
             <version>${spark.version}</version>
             <scope>${spark.scope}</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.7.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch-spark_${scala.compact}</artifactId>
             <version>${es-hadoop.version}</version>
             <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
                 <exclusion>
                     <groupId>org.apache.spark</groupId>
                     <artifactId>spark-sql_${scala.compact}</artifactId>
@@ -95,7 +111,7 @@
         <dependency>
             <groupId>com.univocity</groupId>
             <artifactId>univocity-parsers</artifactId>
-            <version>2.2.3</version>
+            <version>2.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
@@ -198,7 +214,7 @@
                                 </transformer>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.esri.Main</mainClass>
+                                    <mainClass>com.esri.MainApp</mainClass>
                                 </transformer>
                             </transformers>
                             <filters>

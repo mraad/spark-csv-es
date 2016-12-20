@@ -10,11 +10,12 @@ import org.elasticsearch.spark._
 import scala.collection.JavaConverters._
 
 /**
+  * @deprecated
   */
-object Main extends App with Logging {
+object MainOld extends App with Logging {
 
   val sparkConf = new SparkConf()
-    .setAppName(Main.getClass.getSimpleName)
+    .setAppName(MainOld.getClass.getSimpleName)
     // .setMaster("local[*]")
     // .set("spark.driver.memory", "16g")
     // .set("spark.executor.memory", "16g")
@@ -26,13 +27,13 @@ object Main extends App with Logging {
     classOf[FieldDateISO],
     classOf[FieldDateTime],
     classOf[FieldDateOnly],
-    classOf[FieldValue],
+    classOf[FieldParser],
     classOf[FieldFloat],
     classOf[FieldInt],
     classOf[FieldGeo],
     classOf[FieldGrid],
     classOf[FieldString],
-    classOf[CSVReader],
+    classOf[CSVReaderOld],
     classOf[HexGrid],
     classOf[HexRowCol],
     classOf[HexXY],
@@ -101,7 +102,7 @@ object Main extends App with Logging {
     val fieldSep = if (fieldSepProp.startsWith("0")) Integer.parseInt(fieldSepProp, 16).toChar else fieldSepProp.charAt(0)
     val headerCount = conf.getInt("header.count", 0) - 1
     val throwException = conf.getBoolean("error.exception", true)
-    val csvReader = new CSVReader(fieldSep)
+    val csvReader = new CSVReaderOld(fieldSep)
     sc.textFile(conf.get("input.path"))
       .zipWithIndex()
       .filter(_._2 > headerCount)
@@ -112,7 +113,7 @@ object Main extends App with Logging {
           Some(map)
         }
         catch {
-          case t: Throwable => {
+          case _: Throwable => {
             acc += 1
             None
           }

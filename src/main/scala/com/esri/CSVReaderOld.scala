@@ -4,25 +4,18 @@ import java.io.StringReader
 
 import com.univocity.parsers.csv.{CsvParser, CsvParserSettings}
 
-class CSVReader2(parser: CsvParser) extends Serializable {
-  def parseCSV(line: String): Array[String] = {
-    parser.beginParsing(new StringReader(line))
-    val parsed = parser.parseNext()
-    parser.stopParsing()
-    parsed
-  }
-}
-
-object CSVReader2 {
-  def apply(fieldSep: Char = ',',
-            lineSep: String = "\n",
-            quote: Char = '"',
-            escape: Char = '\\',
-            ignoreLeadingSpace: Boolean = true,
-            ignoreTrailingSpace: Boolean = true,
-            inputBufSize: Int = 128,
-            maxCols: Int = 20480): CSVReader2 = {
-
+/**
+  * @deprecated
+  */
+class CSVReaderOld(fieldSep: Char = ',',
+                   lineSep: String = "\n",
+                   quote: Char = '"',
+                   escape: Char = '\\',
+                   ignoreLeadingSpace: Boolean = true,
+                   ignoreTrailingSpace: Boolean = true,
+                   inputBufSize: Int = 128,
+                   maxCols: Int = 20480) extends Serializable {
+  lazy val parser = {
     val settings = new CsvParserSettings()
     val format = settings.getFormat
     format.setDelimiter(fieldSep)
@@ -37,6 +30,13 @@ object CSVReader2 {
     settings.setNullValue("")
     settings.setEmptyValue("")
 
-    new CSVReader2(new CsvParser(settings))
+    new CsvParser(settings)
+  }
+
+  def parseCSV(line: String): Array[String] = {
+    parser.beginParsing(new StringReader(line))
+    val parsed = parser.parseNext()
+    parser.stopParsing()
+    parsed
   }
 }

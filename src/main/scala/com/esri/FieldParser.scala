@@ -8,12 +8,13 @@ import org.osgeo.proj4j.{CRSFactory, CoordinateTransformFactory, ProjCoordinate}
 import scala.collection.mutable.ArrayBuffer
 
 /**
+  * @deprecated
   */
-trait FieldValue extends Serializable {
+trait FieldParser extends Serializable {
   def parse(splits: Array[String], lineno: Long, throwException: Boolean): Seq[(String, Any)]
 }
 
-case class FieldString(splits: Array[String]) extends FieldValue with Logging {
+case class FieldString(splits: Array[String]) extends FieldParser with Logging {
   val fieldName = splits(1)
   val index = splits(2).toInt
 
@@ -23,7 +24,7 @@ case class FieldString(splits: Array[String]) extends FieldValue with Logging {
   }
 }
 
-case class FieldInt(splits: Array[String]) extends FieldValue with Logging {
+case class FieldInt(splits: Array[String]) extends FieldParser with Logging {
   val fieldName = splits(1)
   val index = splits(2).toInt
 
@@ -50,7 +51,7 @@ case class FieldInt(splits: Array[String]) extends FieldValue with Logging {
   }
 }
 
-case class FieldFloat(splits: Array[String]) extends FieldValue with Logging {
+case class FieldFloat(splits: Array[String]) extends FieldParser with Logging {
   val fieldName = splits(1)
   val index = splits(2).toInt
 
@@ -82,7 +83,7 @@ case class FieldFloat(splits: Array[String]) extends FieldValue with Logging {
   *
   * @param splits
   */
-case class FieldDateTime(splits: Array[String]) extends FieldValue with Logging {
+case class FieldDateTime(splits: Array[String]) extends FieldParser with Logging {
 
   val fieldName = splits(1)
   val indexDate = splits(2).toInt
@@ -122,7 +123,7 @@ case class FieldDateTime(splits: Array[String]) extends FieldValue with Logging 
   }
 }
 
-case class FieldDate(splits: Array[String]) extends FieldValue with Logging {
+case class FieldDate(splits: Array[String]) extends FieldParser with Logging {
 
   val fieldName = splits(1)
   val index = splits(2).toInt
@@ -166,7 +167,7 @@ case class FieldDate(splits: Array[String]) extends FieldValue with Logging {
   * "format": "date_optional_time"
   * }
   */
-case class FieldDateISO(splits: Array[String]) extends FieldValue with Logging {
+case class FieldDateISO(splits: Array[String]) extends FieldParser with Logging {
 
   val fieldName = splits(1)
   val index = splits(2).toInt
@@ -204,7 +205,7 @@ case class FieldDateISO(splits: Array[String]) extends FieldValue with Logging {
   }
 }
 
-case class FieldDateOnly(splits: Array[String]) extends FieldValue with Logging {
+case class FieldDateOnly(splits: Array[String]) extends FieldParser with Logging {
 
   val fieldName = splits(1)
   val index = splits(2).toInt
@@ -236,7 +237,7 @@ case class FieldDateOnly(splits: Array[String]) extends FieldValue with Logging 
   }
 }
 
-case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends FieldValue with Logging {
+case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends FieldParser with Logging {
 
   val fieldName = splits(1)
   val indexLon = splits(2).toInt
@@ -298,7 +299,7 @@ case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends Fi
   }
 }
 
-case class FieldGrid(conf: Map[String, String], splits: Array[String]) extends FieldValue with Logging {
+case class FieldGrid(conf: Map[String, String], splits: Array[String]) extends FieldParser with Logging {
 
   val fieldName = splits(1)
   val indexLon = splits(2).toInt
@@ -337,7 +338,6 @@ case class FieldGrid(conf: Map[String, String], splits: Array[String]) extends F
 
     val textX = splits(indexLon)
     val textY = splits(indexLat)
-    // log.debug(s"$fieldName $textX $textY")
     try {
       orig.x = textX.toDouble
       orig.y = textY.toDouble
@@ -366,7 +366,6 @@ case class FieldGrid(conf: Map[String, String], splits: Array[String]) extends F
       }
     } catch {
       case t: Throwable => {
-        // t.printStackTrace()
         log.error(s"Cannot parse $textX or $textY for field $fieldName at line $lineno")
         if (throwException)
           throw t

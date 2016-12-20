@@ -1,6 +1,33 @@
 # Spark CSV ES
 
-**Update - Aug 24, 2016 - Please start using `date-iso` rather that `date`, as it places in ES the date values in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format.** 
+### Updates
+
+**Dec 20, 2016** Refactored the code to use field factories, eliminating the need for `@transient` fields. In addition, the field definition supports a missing value as the last optional argument, in such that if the parsed field is empty or has a value of 'null', or 'undefined', then the missing value will use as a placeholder value in the document. Still TODO: Implement `grid` and `date-time`.
+The following is a sample property file:
+
+```properties
+spark.app.id=CSV TO ES sample
+spark.ui.enabled=false
+es.nodes=${ES_PORT_9200_TCP_ADDR}
+header.count=1
+index.mapping=sample/geo
+error.exception=false
+hex.x=-20000000.0
+hex.y=-20000000.0
+hex.sizes=10,10;25,25;50,50;100,100;200,200;500,500
+input.path=hdfs:///user/root/sample.csv
+field.sep=,
+fields=geo,loc,1,2;\
+  text,id,0;\
+  text,a_text,3,N/A;\
+  nume,a_nume,4,-99;\
+  real,a_real,5,-99.9;\
+  date,a_date,6,yyyy-MM-dd HH:mm:ss,1970-01-01 00:00:00
+```
+
+**Aug 24, 2016** Please start using `date-iso` rather that `date`, as it places in ES the date values in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format.
+
+## Description
 
 This project is divided into 2 sub-projects:
 
