@@ -1,0 +1,72 @@
+{
+  "mappings": {
+    "geo": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "loc": {
+          "type": "geo_point"
+        },
+        "loc_500": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "loc_200": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "loc_100": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "loc_50": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "loc_25": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "loc_10": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "loc_xm": {
+          "type": "float",
+          "index": "no"
+        },
+        "loc_ym": {
+          "type": "float",
+          "index": "no"
+        },
+        "a_text": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "a_nume": {
+          "type": "integer"
+        },
+        "a_real": {
+          "type": "float"
+        },
+        "a_date": {
+          "type": "date",
+          "format": "date_optional_time"
+        },
+        "id": {
+          "type": "string",
+          "index": "not_analyzed"
+        }
+      },
+      "_source": {
+        "enabled": true
+      }
+    }
+  },
+  "settings": {
+    "number_of_replicas": 0,
+    "refresh_interval": "-1",
+    "number_of_shards": 8
+  }
+}
