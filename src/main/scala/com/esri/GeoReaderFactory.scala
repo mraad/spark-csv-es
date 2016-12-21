@@ -30,11 +30,13 @@ class GeoReader(fieldName: String,
 
       if (conf.xmin <= lon && lon <= conf.xmax && conf.ymin <= lat && lat <= conf.ymax) {
 
+        // TODO - Make configurable
         list.append((fieldName, "%.6f,%.6f".format(lat, lon)))
 
         val xMercator = WebMercator.longitudeToX(lon)
         val yMercator = WebMercator.latitudeToY(lat)
 
+        // TODO - Make configurable
         list.append((fieldName + "_xm", xMercator))
         list.append((fieldName + "_ym", yMercator))
 

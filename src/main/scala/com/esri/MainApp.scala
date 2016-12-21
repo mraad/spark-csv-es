@@ -20,6 +20,8 @@ object MainApp extends App with Logging {
       classOf[DateMissingReader],
       classOf[DateReader],
       classOf[DateReaderFactory],
+      DateReaderFactory.getClass,
+      DateISOReaderFactory.getClass,
       classOf[FieldReader],
       classOf[FieldReaderFactory],
       classOf[NoopReaderFactory],
@@ -34,7 +36,7 @@ object MainApp extends App with Logging {
       classOf[GeoConf],
       classOf[GeoReader],
       classOf[GeoReaderFactory],
-      classOf[CSVReader2],
+      classOf[CSVReader],
       classOf[HexGrid],
       classOf[HexRowCol],
       classOf[HexXY],
@@ -86,7 +88,8 @@ object MainApp extends App with Logging {
           case "geo" => GeoReaderFactory(splits, conf)
           case "nume" | "int" | "integer" => NumeReaderFactory(splits, conf)
           case "real" | "float" | "double" => RealReaderFactory(splits, conf)
-          case "date" | "date-iso" => DateReaderFactory(splits, conf)
+          case "date" => DateReaderFactory(splits, conf)
+          case "date-iso" => DateISOReaderFactory(splits, conf)
           case _ => TextReaderFactory(splits)
         }
       })
@@ -94,13 +97,11 @@ object MainApp extends App with Logging {
     val fieldSepProp = conf.get("field.sep", "\t")
     val fieldSep = if (fieldSepProp.startsWith("0")) Integer.parseInt(fieldSepProp, 16).toChar else fieldSepProp.charAt(0)
     val headerCount = conf.getInt("header.count", 0) - 1
-    // val throwException = conf.getBoolean("error.exception", true)
-    // val csvReader = new CSVReader(fieldSep)
     sc.textFile(conf.get("input.path"))
       .zipWithIndex()
       .filter(_._2 > headerCount)
       .mapPartitions(iter => {
-        val csvReader = CSVReader2(fieldSep)
+        val csvReader = CSVReader(fieldSep)
         val fields = factories.map(_.createFieldReader())
         iter.flatMap { case (line, lineno) => {
           try {
@@ -109,7 +110,7 @@ object MainApp extends App with Logging {
           }
           catch {
             case t: Throwable => {
-              // log.error(t.toString)
+              log.error(t.getMessage)
               acc += 1
               None
             }

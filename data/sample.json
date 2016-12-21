@@ -52,7 +52,22 @@
         },
         "a_date": {
           "type": "date",
-          "format": "date_optional_time"
+          "format": "YYYY-MM-dd HH:mm:ss"
+        },
+        "a_date_yy": {
+          "type": "integer"
+        },
+        "a_date_mm": {
+          "type": "integer"
+        },
+        "a_date_dd": {
+          "type": "integer"
+        },
+        "a_date_hh": {
+          "type": "integer"
+        },
+        "a_date_dow": {
+          "type": "integer"
         },
         "id": {
           "type": "string",

@@ -2,6 +2,25 @@
 
 ### Updates
 
+**Dec 21, 2016** Added `date.pattern` as a property with default value of `YYYY-MM-dd HH:mm:ss`. This specifies the _output_ date format. This has to match what is defined in the json mapping file.
+For example:
+
+```
+"a_date": {
+  "type": "date",
+  "format": "YYYY-MM-dd'T'HH:mm:ss'Z'"
+}
+```
+
+```
+date.pattern=YYYY-MM-dd'T'HH:mm:ss'Z'
+fields=date,a_date,6,yyyy-MM-dd HH:mm:ss,1970-01-01 00:00:00
+```
+
+The 6th field is parsed using the `yyyy-MM-dd HH:mm:ss` pattern and stored in ES using the `YYYY-MM-dd'T'HH:mm:ss'Z'` pattern.
+If the input value is empty, then it will store the value `1970-01-01T00:00:00Z`.
+Note that what we define is the missing _input_ place holder, onto which the `date.pattern` is applied and the resulting value is placed in the ES document.
+
 **Dec 20, 2016** Refactored the code to use field factories, eliminating the need for `@transient` fields. In addition, the field definition supports a missing value as the last optional argument, in such that if the parsed field is empty or has a value of 'null', or 'undefined', then the missing value will use as a placeholder value in the document. Still TODO: Implement `grid` and `date-time`.
 The following is a sample property file:
 

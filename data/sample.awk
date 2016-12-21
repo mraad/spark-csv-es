@@ -15,7 +15,7 @@ BEGIN{
     if(rand() < 0.5)
         TEXT=""
     else
-        TEXT="TEXT" rand()
+        TEXT="TEXT" int(1000*rand())
 
     if(rand() < 0.5)
         NUME=""
@@ -29,8 +29,12 @@ BEGIN{
 
     if(rand() < 0.5)
         DATE=""
-    else
-        DATE="2000-01-02 12:34:56"
+    else {
+        HH = int(23*rand())
+        MM = int(59*rand())
+        SS = int(59*rand())
+        DATE="2000-01-01 " HH ":" MM ":" SS
+    }
 
     printf "%d,%.6f,%.6f,%s,%s,%s,%s\n",I,X,Y,TEXT,NUME,REAL,DATE
   }

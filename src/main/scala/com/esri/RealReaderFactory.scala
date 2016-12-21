@@ -2,15 +2,19 @@ package com.esri
 
 import org.apache.spark.{Logging, SparkConf}
 
-class RealReader(name: String, index: Int, throwException: Boolean) extends FieldReader with Logging {
+private[esri] abstract class AbstractRealReader(name: String, index: Int, throwException: Boolean)
+  extends FieldReader with Logging {
+
+  val missingSeq: Seq[(String, Any)]
+
   override def readField(splits: Array[String], lineno: Long): Seq[(String, Any)] = {
     val aReal = splits(index).toLowerCase
     if (aReal.isEmpty)
-      Seq.empty
+      missingSeq
     else if (aReal.startsWith("null"))
-      Seq.empty
+      missingSeq
     else if (aReal.startsWith("undefined"))
-      Seq.empty
+      missingSeq
     else
       try {
         Seq((name, aReal.toDouble))
@@ -20,43 +24,31 @@ class RealReader(name: String, index: Int, throwException: Boolean) extends Fiel
           if (throwException)
             throw t
           else
-            Seq.empty
+            missingSeq
         }
       }
   }
 }
 
-class RealMissingReader(name: String, index: Int, throwException: Boolean, missing: Double) extends FieldReader with Logging {
-  override def readField(splits: Array[String], lineno: Long): Seq[(String, Any)] = {
-    val aReal = splits(index).toLowerCase
-    if (aReal.isEmpty)
-      Seq(name -> missing)
-    else if (aReal.startsWith("null"))
-      Seq(name -> missing)
-    else if (aReal.startsWith("undefined"))
-      Seq(name -> missing)
-    else
-      try {
-        Seq((name, aReal.toDouble))
-      } catch {
-        case t: Throwable => {
-          log.error(s"Cannot parse $aReal for field $name at line $lineno")
-          if (throwException)
-            throw t
-          else
-            Seq(name -> missing)
-        }
-      }
-  }
+class RealReader(name: String, index: Int, throwException: Boolean)
+  extends AbstractRealReader(name, index, throwException) {
+  override val missingSeq = Seq.empty
 }
 
-class RealReaderFactory(name: String, index: Int, throwException: Boolean) extends FieldReaderFactory {
+class RealMissingReader(name: String, index: Int, throwException: Boolean, missing: Double)
+  extends AbstractRealReader(name, index, throwException) {
+  override val missingSeq = Seq(name -> missing)
+}
+
+class RealReaderFactory(name: String, index: Int, throwException: Boolean)
+  extends FieldReaderFactory {
   override def createFieldReader(): FieldReader = {
     new RealReader(name, index, throwException)
   }
 }
 
-class RealMissingReaderFactory(name: String, index: Int, throwException: Boolean, missing: Double) extends FieldReaderFactory {
+class RealMissingReaderFactory(name: String, index: Int, throwException: Boolean, missing: Double)
+  extends FieldReaderFactory {
   override def createFieldReader(): FieldReader = {
     new RealMissingReader(name, index, throwException, missing)
   }
