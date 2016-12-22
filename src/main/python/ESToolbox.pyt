@@ -1,19 +1,13 @@
+import arcpy
+import json
+import math
 import traceback
 import urllib
 import urllib2
-
-import json
+from elasticsearch import Elasticsearch
 
 from hexcell import HexCell
 from hexgrid import HexGrid
-import math
-import arcpy
-#
-# https://www.elastic.co/guide/en/elasticsearch/client/python-api/current/index.html
-#
-# pip install elasticsearch
-#
-from elasticsearch import Elasticsearch
 
 
 class Toolbox(object):
@@ -219,6 +213,7 @@ class QueryTool(BaseTool):
         except:
             arcpy.AddMessage(traceback.format_exc())
 
+
 class CreateIndexTool(object):
     def __init__(self):
         self.label = "Create Index"
@@ -270,4 +265,3 @@ class CreateIndexTool(object):
                 es.indices.create(index=index, body=body)
             else:
                 arcpy.AddWarning("{0} already exists !".format(index))
-        return

@@ -13,7 +13,7 @@ time ~/spark-1.6.2-bin-hadoop2.6/bin/spark-submit\
  --conf spark.es.batch.size.entries=0\
  --conf spark.es.batch.write.refresh=false\
  --conf spark.es.batch.write.retry.count=10\
- target/spark-csv-es-3.0.2.jar\
+ target/spark-csv-es-3.0.3.jar\
  data/sample.properties
 
 curl -XGET ${ES_NODE}:9200/sample/_refresh?pretty

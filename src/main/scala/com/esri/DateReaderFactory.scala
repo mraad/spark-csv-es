@@ -8,7 +8,7 @@ private[esri] abstract class AbstractDateReader(fieldName: String,
                                                 patternOrig: String,
                                                 patternDest: Option[String],
                                                 throwException: Boolean
-                                           ) extends FieldReader with Logging {
+                                               ) extends FieldReader with Logging {
 
   val parser = DateTimeFormat.forPattern(patternOrig).withZoneUTC()
   val formatter = if (patternDest.isDefined) DateTimeFormat.forPattern(patternDest.get).withZoneUTC() else ISODateTimeFormat.dateTime()
@@ -90,7 +90,8 @@ class DateMissingReaderFactory(name: String,
                                patternOrig: String,
                                patternDest: Option[String],
                                throwException: Boolean,
-                               missing: String) extends FieldReaderFactory {
+                               missing: String
+                              ) extends FieldReaderFactory {
   override def createFieldReader(): FieldReader = {
     new DateMissingReader(name, index, patternOrig, patternDest, throwException, missing)
   }
