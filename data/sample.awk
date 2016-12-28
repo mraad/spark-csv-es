@@ -8,7 +8,7 @@ BEGIN{
   DY=YMAX-YMIN
   srand()
   print "id,lon,lat,text,nume,real,date"
-  for(I=0;I<1000;I++){
+  for(I=0;I<5;I++){
     X=XMIN+rand()*DX
     Y=YMIN+rand()*DY
 

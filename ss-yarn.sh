@@ -15,7 +15,7 @@ export SS="spark-submit\
  --conf spark.es.batch.size.entries=0\
  --conf spark.es.batch.write.refresh=false\
  --conf spark.es.batch.write.retry.count=10\
- target/spark-csv-es-3.0.3.jar\
+ target/spark-csv-es-3.0.4.jar\
  data/sample.properties"
 
 # ${SS} 2> /dev/null

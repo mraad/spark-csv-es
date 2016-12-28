@@ -1,9 +1,18 @@
 {
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "refresh_interval": -1
+  },
   "mappings": {
     "geo": {
       "_all": {
         "enabled": false
       },
+      "_source": {
+        "enabled": true
+      },
+      "dynamic": false,
       "properties": {
         "loc": {
           "type": "geo_point"
@@ -50,6 +59,10 @@
         "a_real": {
           "type": "float"
         },
+        "a_date_iso": {
+          "type": "date",
+          "format": "date_optional_time"
+        },
         "a_date": {
           "type": "date",
           "format": "YYYY-MM-dd HH:mm:ss"
@@ -73,15 +86,7 @@
           "type": "string",
           "index": "not_analyzed"
         }
-      },
-      "_source": {
-        "enabled": true
       }
     }
-  },
-  "settings": {
-    "number_of_replicas": 0,
-    "refresh_interval": "-1",
-    "number_of_shards": 8
   }
 }

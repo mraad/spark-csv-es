@@ -1,6 +1,7 @@
 package com.esri
 
 import org.apache.spark.{Logging, SparkConf}
+import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat, ISODateTimeFormat}
 
 private[esri] abstract class AbstractDateReader(fieldName: String,
@@ -11,8 +12,10 @@ private[esri] abstract class AbstractDateReader(fieldName: String,
                                                ) extends FieldReader with Logging {
 
   val parser = DateTimeFormat.forPattern(patternOrig).withZoneUTC()
-  val formatter = if (patternDest.isDefined) DateTimeFormat.forPattern(patternDest.get).withZoneUTC() else ISODateTimeFormat.dateTime()
+  val formatter = if (patternDest.isDefined) DateTimeFormat.forPattern(patternDest.get).withZoneUTC() else ISODateTimeFormat.dateTime().withZoneUTC()
   val missingSeq: Seq[(String, Any)]
+
+  def genSeq(datetime: DateTime): Seq[(String, Any)]
 
   override def readField(splits: Array[String], lineNo: Long): Seq[(String, Any)] = {
     val aDate = splits(fieldIndex).toUpperCase
@@ -24,15 +27,7 @@ private[esri] abstract class AbstractDateReader(fieldName: String,
       missingSeq
     else
       try {
-        val datetime = parser.parseDateTime(aDate)
-        Seq(
-          (fieldName, formatter.print(datetime.getMillis)),
-          (fieldName + "_yy", datetime.getYear),
-          (fieldName + "_mm", datetime.getMonthOfYear),
-          (fieldName + "_dd", datetime.getDayOfMonth),
-          (fieldName + "_hh", datetime.getHourOfDay),
-          (fieldName + "_dow", datetime.getDayOfWeek)
-        )
+        genSeq(parser.parseDateTime(aDate))
       } catch {
         case t: Throwable => {
           log.error(s"Cannot parse $aDate for field $fieldName at line $lineNo")
@@ -53,6 +48,33 @@ class DateReader(fieldName: String,
                 ) extends AbstractDateReader(fieldName, fieldIndex, patternOrig, patternDest, throwException) {
 
   override val missingSeq: Seq[(String, Any)] = Seq.empty
+
+  override def genSeq(datetime: DateTime): Seq[(String, Any)] = {
+    Seq(
+      (fieldName, formatter.print(datetime.getMillis)),
+      (fieldName + "_yy", datetime.getYear),
+      (fieldName + "_mm", datetime.getMonthOfYear),
+      (fieldName + "_dd", datetime.getDayOfMonth),
+      (fieldName + "_hh", datetime.getHourOfDay),
+      (fieldName + "_dow", datetime.getDayOfWeek)
+    )
+  }
+}
+
+class DateOnlyReader(fieldName: String,
+                     fieldIndex: Int,
+                     patternOrig: String,
+                     patternDest: Option[String],
+                     throwException: Boolean
+                    ) extends AbstractDateReader(fieldName, fieldIndex, patternOrig, patternDest, throwException) {
+
+  override val missingSeq: Seq[(String, Any)] = Seq.empty
+
+  override def genSeq(datetime: DateTime): Seq[(String, Any)] = {
+    Seq(
+      (fieldName, formatter.print(datetime.getMillis))
+    )
+  }
 }
 
 class DateMissingReader(fieldName: String,
@@ -72,6 +94,37 @@ class DateMissingReader(fieldName: String,
     (fieldName + "_hh", missingDate.getHourOfDay),
     (fieldName + "_dow", missingDate.getDayOfWeek)
   )
+
+  override def genSeq(datetime: DateTime): Seq[(String, Any)] = {
+    Seq(
+      (fieldName, formatter.print(datetime.getMillis)),
+      (fieldName + "_yy", datetime.getYear),
+      (fieldName + "_mm", datetime.getMonthOfYear),
+      (fieldName + "_dd", datetime.getDayOfMonth),
+      (fieldName + "_hh", datetime.getHourOfDay),
+      (fieldName + "_dow", datetime.getDayOfWeek)
+    )
+  }
+}
+
+class DateOnlyMissingReader(fieldName: String,
+                            fieldIndex: Int,
+                            patternOrig: String,
+                            patternDest: Option[String],
+                            throwException: Boolean,
+                            missingVal: String
+                           ) extends AbstractDateReader(fieldName, fieldIndex, patternOrig, patternDest, throwException) {
+
+  val missingDate = parser.parseDateTime(missingVal)
+  override val missingSeq = Seq(
+    (fieldName, formatter.print(missingDate.getMillis))
+  )
+
+  override def genSeq(datetime: DateTime): Seq[(String, Any)] = {
+    Seq(
+      (fieldName, formatter.print(datetime.getMillis))
+    )
+  }
 }
 
 class DateReaderFactory(name: String,
@@ -85,6 +138,17 @@ class DateReaderFactory(name: String,
   }
 }
 
+class DateOnlyReaderFactory(name: String,
+                            index: Int,
+                            patternOrig: String,
+                            patternDest: Option[String],
+                            throwException: Boolean
+                           ) extends FieldReaderFactory {
+  override def createFieldReader(): FieldReader = {
+    new DateOnlyReader(name, index, patternOrig, patternDest, throwException)
+  }
+}
+
 class DateMissingReaderFactory(name: String,
                                index: Int,
                                patternOrig: String,
@@ -94,6 +158,18 @@ class DateMissingReaderFactory(name: String,
                               ) extends FieldReaderFactory {
   override def createFieldReader(): FieldReader = {
     new DateMissingReader(name, index, patternOrig, patternDest, throwException, missing)
+  }
+}
+
+class DateOnlyMissingReaderFactory(name: String,
+                                   index: Int,
+                                   patternOrig: String,
+                                   patternDest: Option[String],
+                                   throwException: Boolean,
+                                   missing: String
+                                  ) extends FieldReaderFactory {
+  override def createFieldReader(): FieldReader = {
+    new DateOnlyMissingReader(name, index, patternOrig, patternDest, throwException, missing)
   }
 }
 
@@ -112,12 +188,41 @@ object DateReaderFactory extends Logging with Serializable {
   }
 }
 
+object DateOnlyReaderFactory extends Logging with Serializable {
+  def apply(splits: Array[String], conf: SparkConf): FieldReaderFactory = {
+    val throwException = conf.getBoolean("error.exception", true)
+    val dateFormat = Some(conf.get("date.pattern", "YYYY-MM-dd HH:mm:ss"))
+    splits match {
+      case Array(_, name, index, pattern) => new DateOnlyReaderFactory(name, index.toInt, pattern, dateFormat, throwException)
+      case Array(_, name, index, pattern, missing) => new DateOnlyMissingReaderFactory(name, index.toInt, pattern, dateFormat, throwException, missing)
+      case _ => {
+        log.warn("Skipping field - Invalid parameters {}", splits.mkString(","))
+        NoopReaderFactory()
+      }
+    }
+  }
+}
+
 object DateISOReaderFactory extends Logging with Serializable {
   def apply(splits: Array[String], conf: SparkConf): FieldReaderFactory = {
     val throwException = conf.getBoolean("error.exception", true)
     splits match {
       case Array(_, name, index, pattern) => new DateReaderFactory(name, index.toInt, pattern, None, throwException)
       case Array(_, name, index, pattern, missing) => new DateMissingReaderFactory(name, index.toInt, pattern, None, throwException, missing)
+      case _ => {
+        log.warn("Skipping field - Invalid parameters {}", splits.mkString(","))
+        NoopReaderFactory()
+      }
+    }
+  }
+}
+
+object DateOnlyISOReaderFactory extends Logging with Serializable {
+  def apply(splits: Array[String], conf: SparkConf): FieldReaderFactory = {
+    val throwException = conf.getBoolean("error.exception", true)
+    splits match {
+      case Array(_, name, index, pattern) => new DateOnlyReaderFactory(name, index.toInt, pattern, None, throwException)
+      case Array(_, name, index, pattern, missing) => new DateOnlyMissingReaderFactory(name, index.toInt, pattern, None, throwException, missing)
       case _ => {
         log.warn("Skipping field - Invalid parameters {}", splits.mkString(","))
         NoopReaderFactory()

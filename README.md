@@ -2,6 +2,13 @@
 
 ### Updates
 
+**Dec 28, 2016** Added `date-only` and `date-only-iso` as field types, in such that only the date field will be added to the document without the `_yy`, `_mm`, `_dd`, `_hh` and `_dow` fields.
+
+```
+fields=date-only,a_date,6,yyyy-MM-dd HH:mm:ss,1970-01-01 00:00:00;\
+ date-only-iso,a_date_iso,6,yyyy-MM-dd HH:mm:ss,1970-01-01 00:00:00
+```
+
 **Dec 21, 2016** Added `date.pattern` as a property with default value of `YYYY-MM-dd HH:mm:ss`. This specifies the _output_ date format. This has to match what is defined in the json mapping file.
 For example:
 

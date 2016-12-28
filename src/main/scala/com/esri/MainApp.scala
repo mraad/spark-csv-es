@@ -89,7 +89,9 @@ object MainApp extends App with Logging {
           case "nume" | "int" | "integer" => NumeReaderFactory(splits, conf)
           case "real" | "float" | "double" => RealReaderFactory(splits, conf)
           case "date" => DateReaderFactory(splits, conf)
+          case "date-only" => DateOnlyReaderFactory(splits, conf)
           case "date-iso" => DateISOReaderFactory(splits, conf)
+          case "date-only-iso" => DateOnlyISOReaderFactory(splits, conf)
           case _ => TextReaderFactory(splits)
         }
       })
