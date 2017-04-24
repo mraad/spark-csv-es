@@ -1,6 +1,6 @@
 package com.esri
 
-import org.apache.spark.Logging
+import org.slf4j.LoggerFactory
 
 private[esri] abstract class AbstractTextReader(name: String, index: Int)
   extends FieldReader {
@@ -37,7 +37,9 @@ class TextMissingReaderFactory(name: String, index: Int, missing: String)
   }
 }
 
-object TextReaderFactory extends Logging with Serializable {
+object TextReaderFactory extends Serializable {
+  @transient lazy val log = LoggerFactory.getLogger(getClass.getName)
+
   def apply(splits: Array[String]): FieldReaderFactory = {
     splits match {
       case Array(_, name, index) => new TextReaderFactory(name, index.toInt)

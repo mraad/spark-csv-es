@@ -1,9 +1,10 @@
 package com.esri
 
-import org.apache.spark.{Logging, SparkConf}
+import org.apache.spark.SparkConf
+import org.slf4j.LoggerFactory
 
 private[esri] abstract class AbstractRealReader(name: String, index: Int, throwException: Boolean)
-  extends FieldReader with Logging {
+  extends FieldReader {
 
   val missingSeq: Seq[(String, Any)]
 
@@ -54,7 +55,9 @@ class RealMissingReaderFactory(name: String, index: Int, throwException: Boolean
   }
 }
 
-object RealReaderFactory extends Logging with Serializable {
+object RealReaderFactory extends Serializable {
+  @transient lazy val log = LoggerFactory.getLogger(getClass.getName)
+
   def apply(splits: Array[String], conf: SparkConf): FieldReaderFactory = {
     val throwException = conf.getBoolean("error.exception", true)
     splits match {

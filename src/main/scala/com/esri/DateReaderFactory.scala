@@ -1,16 +1,17 @@
 package com.esri
 
-import org.apache.spark.{Logging, SparkConf}
+import org.apache.spark.SparkConf
 import org.joda.time.DateTime
 import org.joda.time.format.{DateTimeFormat, ISODateTimeFormat}
+import org.slf4j.LoggerFactory
+
 
 private[esri] abstract class AbstractDateReader(fieldName: String,
                                                 fieldIndex: Int,
                                                 patternOrig: String,
                                                 patternDest: Option[String],
                                                 throwException: Boolean
-                                               ) extends FieldReader with Logging {
-
+                                               ) extends FieldReader {
   val parser = DateTimeFormat.forPattern(patternOrig).withZoneUTC()
   val formatter = if (patternDest.isDefined) DateTimeFormat.forPattern(patternDest.get).withZoneUTC() else ISODateTimeFormat.dateTime().withZoneUTC()
   val missingSeq: Seq[(String, Any)]
@@ -173,7 +174,9 @@ class DateOnlyMissingReaderFactory(name: String,
   }
 }
 
-object DateReaderFactory extends Logging with Serializable {
+object DateReaderFactory extends Serializable {
+  @transient lazy val log = LoggerFactory.getLogger(getClass.getName)
+
   def apply(splits: Array[String], conf: SparkConf): FieldReaderFactory = {
     val throwException = conf.getBoolean("error.exception", true)
     val dateFormat = Some(conf.get("date.pattern", "YYYY-MM-dd HH:mm:ss"))
@@ -188,7 +191,9 @@ object DateReaderFactory extends Logging with Serializable {
   }
 }
 
-object DateOnlyReaderFactory extends Logging with Serializable {
+object DateOnlyReaderFactory extends Serializable {
+  @transient lazy val log = LoggerFactory.getLogger(getClass.getName)
+
   def apply(splits: Array[String], conf: SparkConf): FieldReaderFactory = {
     val throwException = conf.getBoolean("error.exception", true)
     val dateFormat = Some(conf.get("date.pattern", "YYYY-MM-dd HH:mm:ss"))
@@ -203,7 +208,9 @@ object DateOnlyReaderFactory extends Logging with Serializable {
   }
 }
 
-object DateISOReaderFactory extends Logging with Serializable {
+object DateISOReaderFactory extends Serializable {
+  @transient lazy val log = LoggerFactory.getLogger(getClass.getName)
+
   def apply(splits: Array[String], conf: SparkConf): FieldReaderFactory = {
     val throwException = conf.getBoolean("error.exception", true)
     splits match {
@@ -217,7 +224,9 @@ object DateISOReaderFactory extends Logging with Serializable {
   }
 }
 
-object DateOnlyISOReaderFactory extends Logging with Serializable {
+object DateOnlyISOReaderFactory extends Serializable {
+  @transient lazy val log = LoggerFactory.getLogger(getClass.getName)
+
   def apply(splits: Array[String], conf: SparkConf): FieldReaderFactory = {
     val throwException = conf.getBoolean("error.exception", true)
     splits match {

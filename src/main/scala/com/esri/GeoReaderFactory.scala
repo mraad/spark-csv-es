@@ -1,7 +1,8 @@
 package com.esri
 
 import com.esri.hex.HexGrid
-import org.apache.spark.{Logging, SparkConf}
+import org.apache.spark.SparkConf
+import org.slf4j.LoggerFactory
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -16,7 +17,7 @@ class GeoReader(fieldName: String,
                 indexLon: Int,
                 indexLat: Int,
                 conf: GeoConf
-               ) extends FieldReader with Logging {
+               ) extends FieldReader {
 
   override def readField(splits: Array[String], lineNo: Long): Seq[(String, Any)] = {
 
@@ -71,7 +72,9 @@ class GeoReaderFactory(name: String,
   }
 }
 
-object GeoReaderFactory extends Logging with Serializable {
+object GeoReaderFactory extends Serializable {
+  @transient lazy val log = LoggerFactory.getLogger(getClass.getName)
+
   def apply(splits: Array[String], conf: SparkConf): FieldReaderFactory = {
     splits match {
       case Array(_, name, lonIndex, latIndex) => {

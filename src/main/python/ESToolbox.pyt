@@ -89,7 +89,7 @@ class HexTool(BaseTool):
         paramCell = self.getParamSize(value="100")
         paramCell.filter.type = "ValueList"
         paramCell.filter.list = ["10", "100", "200", "500", "1K"]
-        paramWhere = self.getParamString(name="in_where", displayName="Where", value="servicetypecode='SNOW'")
+        paramWhere = self.getParamString(name="in_where", displayName="Where", value="test_id > 0")
         paramName = self.getParamName(value="hex100")
         return [paramCell, paramWhere, paramName, self.getParamFC()]
 
@@ -130,12 +130,13 @@ class HexTool(BaseTool):
             arcpy.management.CreateFeatureclass(ws, name, "POLYGON", spatial_reference=spref)
             arcpy.management.AddField(fc, "POPULATION", "LONG")
 
-            url = "http://mansour-mac:9200/_sql"
+            url = "http://local192:9200/_sql"
             params = {
-                'sql': "SELECT " + key + " AS mykey,count(" + key + ") AS myval FROM dc/sr311 WHERE " + key +
+                'sql': "SELECT " + key + " AS mykey,count(" + key + ") AS myval FROM hdfscsv/geo WHERE " + key +
                        " <> '0:0' AND " + where + " GROUP BY " + key + " LIMIT 20000"
             }
             data = urllib.urlencode(params)
+            arcpy.AddMessage(url + "?" + data)
             req = urllib2.Request(url + "?" + data)
             res = urllib2.urlopen(req)
             doc = json.load(res)
@@ -191,7 +192,7 @@ class QueryTool(BaseTool):
             arcpy.management.AddField(fc, "SERVICE", "TEXT", field_length=64)
             arcpy.management.AddField(fc, "ZIPCODE", "TEXT", field_length=10)
 
-            url = "http://mansour-mac:9200/_sql"
+            url = "http://local192:9200/_sql"
             params = {
                 'sql': "SELECT loc_xm,loc_ym,servicecodedescription,zipcode FROM dc/sr311 WHERE loc_100 <> '0:0'" +
                        where + " LIMIT 100000"
@@ -227,7 +228,7 @@ class CreateIndexTool(object):
             direction="Input",
             datatype="GPString",
             parameterType="Required")
-        paramName.value = "mansour-mac"
+        paramName.value = "local192"
 
         paramIndex = arcpy.Parameter(
             name="in_index",

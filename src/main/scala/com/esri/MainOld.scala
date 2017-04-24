@@ -4,15 +4,17 @@ import java.io.{File, FileReader}
 import java.util.Properties
 
 import com.esri.hex.{Hex00, HexGrid, HexRowCol, HexXY}
-import org.apache.spark.{Logging, SparkConf, SparkContext}
+import org.apache.spark.{SparkConf, SparkContext}
 import org.elasticsearch.spark._
+import org.slf4j.LoggerFactory
 
 import scala.collection.JavaConverters._
 
 /**
   * @deprecated
   */
-object MainOld extends App with Logging {
+object MainOld extends App {
+  @transient lazy val log = LoggerFactory.getLogger(getClass.getName)
 
   val sparkConf = new SparkConf()
     .setAppName(MainOld.getClass.getSimpleName)

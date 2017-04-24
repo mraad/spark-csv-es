@@ -5,14 +5,14 @@
 
     <groupId>com.esri</groupId>
     <artifactId>spark-csv-es</artifactId>
-    <version>3.0.4</version>
+    <version>4.0.0</version>
     <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <scala.compact>2.10</scala.compact>
-        <scala.version>${scala.compact}.6</scala.version>
-        <es-hadoop.version>2.3.3</es-hadoop.version>
+        <scala.compact>2.11</scala.compact>
+        <scala.version>${scala.compact}.7</scala.version>
+        <es-hadoop.version>5.3.1</es-hadoop.version>
     </properties>
 
     <repositories>
@@ -66,7 +66,7 @@
         </dependency>
         <dependency>
             <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch-spark_${scala.compact}</artifactId>
+            <artifactId>elasticsearch-spark-20_${scala.compact}</artifactId>
             <version>${es-hadoop.version}</version>
             <exclusions>
                 <exclusion>
@@ -242,13 +242,15 @@
             </activation>
             <properties>
                 <java.version>1.8</java.version>
-                <spark.version>1.6.1</spark.version>
+                <spark.version>2.1.0</spark.version>
                 <spark.scope>provided</spark.scope>
             </properties>
         </profile>
         <profile>
             <id>spark-in-intelliJ</id>
             <properties>
+                <java.version>1.8</java.version>
+                <spark.version>2.1.0</spark.version>
                 <spark.scope>compile</spark.scope>
             </properties>
         </profile>
