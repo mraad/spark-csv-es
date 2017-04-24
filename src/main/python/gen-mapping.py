@@ -99,7 +99,7 @@ def main():
 
     base = os.path.basename(sys.argv[1])
     name = os.path.splitext(base)[0]
-    print("Post Example: curl -XPOST localhost:9200/{}?pretty -d @{}.json".format(name.lower(), basename))
+    print("PUT Example: curl -XPUT localhost:9200/{}?pretty -d @{}.json".format(name.lower(), basename))
 
 
 if __name__ == '__main__':

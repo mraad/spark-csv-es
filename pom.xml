@@ -5,7 +5,7 @@
 
     <groupId>com.esri</groupId>
     <artifactId>spark-csv-es</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -101,7 +101,7 @@
         <dependency>
             <groupId>com.esri</groupId>
             <artifactId>hex-grid</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>org.osgeo</groupId>
