@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# The zoo
-
 DAEMONS="\
  zookeeper-server\
  hadoop-hdfs-datanode\
