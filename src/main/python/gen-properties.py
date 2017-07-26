@@ -25,7 +25,7 @@ def main():
             # name = field.lower()
             # remove weird chars in headers
             name = ''.join(s for s in field.lower() if s in string.printable)
-            arr.append("string,{},{}".format(name, index))
+            arr.append("string,{0},{1}".format(name, index))
             index += 1
 
         join = ";\\\n  ".join(arr)
@@ -35,15 +35,15 @@ def main():
         fullpath = os.path.splitext(sys.argv[1])[0]
         with open(fullpath + ".properties", "wb") as fw:
             fw.write("spark.master=local[*]\n")
-            fw.write("spark.app.id=CSV TO ES {}\n".format(name))
+            fw.write("spark.app.id=CSV TO ES {0}\n".format(name))
             # fw.write("spark.driver.memory=8g\n")
             fw.write("spark.executor.memory=12g\n")
             fw.write("es.nodes=localhost\n")
-            fw.write("index.mapping={}/geo\n".format(name.lower()))
+            fw.write("index.mapping={0}/geo\n".format(name.lower()))
             fw.write("hex.sizes=10,10;25,25;50,50;100,100;200,200;500,500\n")
-            fw.write("input.path={}\n".format(sys.argv[1]))
-            fw.write("field.sep={}\n".format(field_sep))
-            fw.write("fields={}\n".format(join))
+            fw.write("input.path={0}\n".format(sys.argv[1]))
+            fw.write("field.sep={0}\n".format(field_sep))
+            fw.write("fields={0}\n".format(join))
 
 
 if __name__ == '__main__':

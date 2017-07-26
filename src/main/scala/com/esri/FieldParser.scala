@@ -239,7 +239,7 @@ case class FieldDateOnly(splits: Array[String]) extends FieldParser {
   }
 }
 
-case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends FieldParser  {
+case class FieldGeo(conf: Map[String, String], splits: Array[String]) extends FieldParser {
 
   val fieldName = splits(1)
   val indexLon = splits(2).toInt

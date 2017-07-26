@@ -114,7 +114,7 @@ object MainApp extends App {
           }
           catch {
             case t: Throwable => {
-              log.error(t.getMessage)
+              log.error(t.toString)
               acc += 1
               None
             }

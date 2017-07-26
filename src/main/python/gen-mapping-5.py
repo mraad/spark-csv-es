@@ -34,13 +34,13 @@ def main():
             properties[name + "_xm"] = {"type": "float", "index": "no"}
             properties[name + "_ym"] = {"type": "float", "index": "no"}
             for hs in hex_sizes:
-                properties[name + "_" + hs] = {"type": "string", "index": "not_analyzed"}
+                properties[name + "_" + hs] = {"type": "keyword"}
         elif tokens[0] == 'grid':
             name = tokens[1]
             properties[name] = {"type": "geo_point"}
             properties[name + "_xm"] = {"type": "float", "index": "no"}
             properties[name + "_ym"] = {"type": "float", "index": "no"}
-            properties[name + "_g"] = {"type": "string", "index": "not_analyzed"}
+            properties[name + "_g"] = {"type": "keyword"}
         elif tokens[0] == 'int':
             properties[tokens[1]] = {"type": "integer"}
         elif tokens[0] == 'long':
@@ -73,14 +73,13 @@ def main():
             properties[name] = {"type": "date", "format": date_format}
         else:
             name = tokens[1]
-            properties[name] = {"type": "string", "index": "not_analyzed"}
+            properties[name] = {"type": "keyword"}
 
     doc = {
         "settings": {
             "number_of_shards": 1,
             "number_of_replicas": 0,
-            "refresh_interval": "-1",
-            "auto_expand_replicas": "false"
+            "refresh_interval": "-1"
         },
         "mappings": {mappings: {
             "_all": {

@@ -5,14 +5,14 @@
 
     <groupId>com.esri</groupId>
     <artifactId>spark-csv-es</artifactId>
-    <version>4.0.1</version>
+    <version>5.0</version>
     <packaging>jar</packaging>
+
+    <name>spark-csv-es</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <scala.compact>2.11</scala.compact>
-        <scala.version>${scala.compact}.7</scala.version>
-        <es-hadoop.version>5.3.1</es-hadoop.version>
+        <es-hadoop.version>5.5.0</es-hadoop.version>
     </properties>
 
     <repositories>
@@ -23,21 +23,9 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>scala-tools.org</id>
-            <url>http://scala-tools.org/repo-releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 
     <pluginRepositories>
-        <pluginRepository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </pluginRepository>
     </pluginRepositories>
 
     <dependencies>
@@ -96,7 +84,7 @@
         <dependency>
             <groupId>com.esri</groupId>
             <artifactId>webmercator</artifactId>
-            <version>1.0</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>com.esri</groupId>
@@ -111,7 +99,7 @@
         <dependency>
             <groupId>com.univocity</groupId>
             <artifactId>univocity-parsers</artifactId>
-            <version>2.3.0</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
@@ -244,14 +232,18 @@
                 <java.version>1.8</java.version>
                 <spark.version>2.1.0</spark.version>
                 <spark.scope>provided</spark.scope>
+                <scala.compact>2.11</scala.compact>
+                <scala.version>${scala.compact}.7</scala.version>
             </properties>
         </profile>
         <profile>
-            <id>spark-in-intelliJ</id>
+            <id>spark-compile</id>
             <properties>
                 <java.version>1.8</java.version>
                 <spark.version>2.1.0</spark.version>
                 <spark.scope>compile</spark.scope>
+                <scala.compact>2.11</scala.compact>
+                <scala.version>${scala.compact}.7</scala.version>
             </properties>
         </profile>
         <profile>
@@ -260,6 +252,8 @@
                 <java.version>1.7</java.version>
                 <spark.version>1.6.0-cdh5.7.0</spark.version>
                 <spark.scope>provided</spark.scope>
+                <scala.compact>2.10</scala.compact>
+                <scala.version>${scala.compact}.6</scala.version>
             </properties>
             <dependencies>
                 <dependency>
