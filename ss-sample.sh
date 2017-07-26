@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 export ES_NODES=${ES_PORT_9200_TCP_ADDR:-localhost}
-curl -XDELETE ${ES_NODES}:9200/sample?pretty
-curl -XPOST ${ES_NODES}:9200/sample?pretty -d @data/sample.json
+# curl -XDELETE ${ES_NODES}:9200/sample?pretty
+# curl -XPUT ${ES_NODES}:9200/sample?pretty -d @data/sample.json
 
-export SS="spark-submit\
+spark-submit\
  --master yarn\
  --num-executors 2\
  --executor-cores 2\
@@ -15,9 +15,8 @@ export SS="spark-submit\
  --conf spark.es.batch.size.entries=0\
  --conf spark.es.batch.write.refresh=false\
  --conf spark.es.batch.write.retry.count=10\
- target/spark-csv-es-3.0.4.jar\
- data/sample.properties"
+ target/spark-csv-es-5.1.jar\
+ data/sample.properties
 
-# ${SS} 2> /dev/null
-# echo $?
-${SS}
+curl -XGET $ES_NODES:9200/sample/_refresh?pretty
+curl -XGET $ES_NODES:9200/sample/_count?pretty
