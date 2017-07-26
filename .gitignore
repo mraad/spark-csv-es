@@ -3,5 +3,6 @@ target/
 src/main/python/*.xml
 dependency-reduced-pom.xml
 *.iml
+**/*.pyc
 ss-avl.sh
 ss-lab.sh
